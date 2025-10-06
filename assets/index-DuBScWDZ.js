@@ -364,8 +364,12 @@ For more information, see https://radix-ui.com/primitives/docs/components/${t.do
 
 \`\`\`xml
 <solution>
-  <improved_answer><![CDATA[这里是改进之后的答案]]></improved_answer>
-  <improved_explanation><![CDATA[这里是改进之后的解析]]></improved_explanation>
+  <improved_answer>
+    <![CDATA[这里是改进之后的答案]]>
+  </improved_answer>
+  <improved_explanation>
+    <![CDATA[这里是改进之后的解析]]>
+  </improved_explanation>
 </solution>
 \`\`\`
 
@@ -378,6 +382,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${t.do
     *   例如: \`$$ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$\`
 3.  **CDATA封装**: \`improved_answer\` 和 \`improved_explanation\` 字段内的所有内容（包括使用Markdown和LaTeX的部分）都**必须**被包裹在 \`<![CDATA[...]]>\` 块中，以防止XML解析错误。
 4.  **Markdown使用**: 在 \`improved_explanation\` 内部可以使用Markdown语法（如列表、加粗）来提高可读性。
+5. 不要模仿用户输入的语法, 用户输入的语法是经过encode 的, 输出之后无法渲染
+6. 务必使用正确的语法
 `,eb=String.raw`
 #### 角色
 你是一个高级AI作业求解器 (Advanced AI Homework Solver)。你的任务是精准、高效地分析用户上传的图片中的学术问题，并提供结构化的解答。
