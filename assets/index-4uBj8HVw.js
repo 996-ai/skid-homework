@@ -416,7 +416,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${t.do
 
 #### 格式化指南
 1.  **LaTeX语法**: 所有数学公式、符号和方程都必须使用LaTeX语法，并用 \`$$ ... $$\` 包裹。
-    *   例如: \`$$ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} $$\`
+    *   例如: \`$$ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$\`
 2.  **Markdown与CDATA**: \`explanation\` 字段内可以使用Markdown语法（如列表、加粗）来提高可读性。为了确保XML解析的正确性，**markdown内容必须被包裹在 \`<![CDATA[...]]>\` 块中**。客户端渲染器支持 remarkGfm 和 \`\${"\`"}remarkMath\${"\`"}\`。
 3.  **标签规范**: 保持XML标签的整洁和规范性，确保所有标签都正确闭合。
 
@@ -453,8 +453,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${t.do
 *   首先，我们需要找到两个数，它们的和为-5，积为6。这两个数是-2和-3。
 *   将原方程分解为：$$ (x - 2)(x - 3) = 0 $$
 *   根据乘积为零的性质，可得两个可能的解：
-    *   $$ x - 2 = 0 \\Rightarrow x_1 = 2 $$
-    *   $$ x - 3 = 0 \\Rightarrow x_2 = 3 $$
+    *   $$ x - 2 = 0 \Rightarrow x_1 = 2 $$
+    *   $$ x - 3 = 0 \Rightarrow x_2 = 3 $$
 
 **2. 结论**
 因此，方程的解为 $$ x_1 = 2 $$ 和 $$ x_2 = 3 $$。]]></explanation>
