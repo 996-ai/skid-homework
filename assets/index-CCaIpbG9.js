@@ -405,7 +405,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${t.do
 <solution>
   <problems>
     <problem>
-      <problem_text>这里是OCR识别出的完整问题文本。</problem_text>
+      <problem_text><![CDATA[这里是OCR识别出的完整问题文本。]]</problem_text>
       <answer><![CDATA[这里是问题的最终答案。]]</answer>
       <explanation><![CDATA[这里是问题的详细解题步骤。]]></explanation>
     </problem>
