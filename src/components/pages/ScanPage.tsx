@@ -25,8 +25,12 @@ export default function ScanPage() {
     removeImageItem, // Rename to avoid conflict with local function
     clearAllItems,
     addSolution: addImageSolution,
-    removeSolutionsByUrls,
+    removeSolutionsByFileItemIds,
     clearAllSolutions,
+    setStreamingText,
+    clearStreamingText,
+    loadFromDB,
+    clearAllWithDB,
   } = useProblemsStore((s) => s);
 
   // Zustand store for Gemini API configuration.
@@ -37,6 +41,11 @@ export default function ScanPage() {
 
   // State to track if the AI is currently processing images.
   const setWorking = useProblemsStore((s) => s.setWorking);
+
+  // Effect hook to load data from database on component mount
+  useEffect(() => {
+    loadFromDB();
+  }, [loadFromDB]);
 
   // Effect hook to clean up object URLs when the component unmounts or items change.
   useEffect(() => {
@@ -84,10 +93,8 @@ export default function ScanPage() {
   };
 
   // Function to clear all uploaded items and solutions.
-  const clearAll = () => {
-    items.forEach((i) => URL.revokeObjectURL(i.url)); // Clean up all object URLs.
-    clearAllItems();
-    clearAllSolutions(); // Use the semantic action to clear solutions.
+  const clearAll = async () => {
+    await clearAllWithDB(); // Use the new action that clears both state and database.
   };
 
   // Utility function to retry an async operation with exponential backoff.
@@ -179,10 +186,10 @@ ${geminiTraits}
       const n = itemsToProcess.length;
 
       // Prepare to remove existing solutions for images that are being re-processed.
-      const urlsToProcess = new Set(itemsToProcess.map((item) => item.url));
+      const fileItemIdsToProcess = new Set(itemsToProcess.map((item) => item.id));
 
       // Use the store action to safely filter out existing solutions.
-      removeSolutionsByUrls(urlsToProcess);
+      removeSolutionsByFileItemIds(fileItemIdsToProcess);
 
       /**
        * Processes a single image item.
@@ -201,18 +208,20 @@ ${geminiTraits}
               item.mimeType,
               undefined,
               geminiModel,
+              (text) => setStreamingText(text),
             ),
           );
 
           const res = parseSolveResponse(resText);
 
           addImageSolution({
-            imageUrl: item.url,
+            fileItemId: item.id,
             success: true,
             problems: res?.problems ?? [],
           });
 
           updateItemStatus(item.id, "success");
+          clearStreamingText();
         } catch (err) {
           console.error(
             `Failed to process ${item.id} after multiple retries:`,
@@ -226,12 +235,13 @@ ${geminiTraits}
           };
 
           addImageSolution({
-            imageUrl: item.url,
+            fileItemId: item.id,
             success: false,
             problems: [failureProblem],
           });
 
           updateItemStatus(item.id, "failed");
+          clearStreamingText();
         }
       };
 

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { dbManager, type AppState } from "@/utils/db";
 
 // Type definition for an image item in the upload list.
 export type FileItem = {
@@ -12,7 +13,7 @@ export type FileItem = {
 
 // Type definition for the solution set of a single image.
 export type Solution = {
-  imageUrl: string; // URL of the source image, used as a key
+  fileItemId: string; // ID of the source FileItem, used as a stable key
   success: boolean; // Whether the AI processing was successful
   problems: ProblemSolution[]; // Array of problems found in the image
 };
@@ -31,6 +32,8 @@ export interface ProblemsState {
   selectedImage?: string;
   selectedProblem: number;
   isWorking: boolean;
+  streamingText: string;
+  isStreaming: boolean;
 
   // --- ACTIONS ---
 
@@ -39,7 +42,7 @@ export interface ProblemsState {
   updateItemStatus: (id: string, status: FileItem["status"]) => void;
   removeImageItem: (id: string) => void;
   updateProblem: (
-    imageUrl: string,
+    fileItemId: string,
     problemIndex: number,
     newAnswer: string,
     newExplanation: string,
@@ -48,7 +51,7 @@ export interface ProblemsState {
 
   // Actions for managing image solutions
   addSolution: (solution: Solution) => void;
-  removeSolutionsByUrls: (urls: Set<string>) => void;
+  removeSolutionsByFileItemIds: (fileItemIds: Set<string>) => void;
   clearAllSolutions: () => void;
 
   // Actions for managing selection state
@@ -57,6 +60,14 @@ export interface ProblemsState {
 
   // Actions to update is working
   setWorking: (isWorking: boolean) => void;
+
+  // Actions for streaming text
+  setStreamingText: (text: string) => void;
+  clearStreamingText: () => void;
+
+  // Actions for persistence
+  loadFromDB: () => Promise<void>;
+  clearAllWithDB: () => Promise<void>;
 }
 
 export const useProblemsStore = create<ProblemsState>((set) => ({
@@ -66,6 +77,8 @@ export const useProblemsStore = create<ProblemsState>((set) => ({
   selectedImage: undefined,
   selectedProblem: 0,
   isWorking: false,
+  streamingText: "",
+  isStreaming: false,
 
   // --- ACTION IMPLEMENTATIONS ---
 
@@ -74,37 +87,61 @@ export const useProblemsStore = create<ProblemsState>((set) => ({
    * This uses the functional form of `set` to prevent race conditions
    * when adding items from multiple sources.
    */
-  addFileItems: (newItems) =>
-    set((state) => ({ imageItems: [...state.imageItems, ...newItems] })),
+  addFileItems: (newItems) => {
+    set((state) => ({ imageItems: [...state.imageItems, ...newItems] }));
+    
+    // 异步保存到数据库
+    newItems.forEach((item) => {
+      dbManager.saveFileItem(item).catch((error) => {
+        console.error("Failed to save file item to database:", error);
+      });
+    });
+  },
 
   /**
    * Updates the status of a specific image item.
    * This is concurrency-safe because it operates on the latest state.
    */
-  updateItemStatus: (id, status) =>
+  updateItemStatus: (id, status) => {
     set((state) => ({
       imageItems: state.imageItems.map((item) =>
         item.id === id ? { ...item, status } : item,
       ),
-    })),
+    }));
+    
+    // 异步更新数据库中的状态
+    const item = useProblemsStore.getState().imageItems.find(i => i.id === id);
+    if (item) {
+      const updatedItem = { ...item, status };
+      dbManager.saveFileItem(updatedItem).catch((error) => {
+        console.error("Failed to update file item status in database:", error);
+      });
+    }
+  },
 
   /**
    * Removes a single image item by its ID.
    */
-  removeImageItem: (id) =>
+  removeImageItem: (id) => {
     set((state) => ({
       imageItems: state.imageItems.filter((item) => item.id !== id),
-    })),
+    }));
+    
+    // 异步从数据库删除
+    dbManager.deleteFileItem(id).catch((error) => {
+      console.error("Failed to delete file item from database:", error);
+    });
+  },
 
   updateProblem: (
-    imageUrl: string,
+    fileItemId: string,
     problemIndex: number,
     newAnswer: string,
     newExplanation: string,
-  ) =>
+  ) => {
     set((state) => ({
       imageSolutions: state.imageSolutions.map((solution) => {
-        if (solution.imageUrl === imageUrl) {
+        if (solution.fileItemId === fileItemId) {
           const updatedProblems = [...solution.problems];
 
           updatedProblems[problemIndex] = {
@@ -117,7 +154,18 @@ export const useProblemsStore = create<ProblemsState>((set) => ({
         }
         return solution;
       }),
-    })),
+    }));
+    
+    // 异步更新数据库中的解决方案
+    const updatedSolution = useProblemsStore.getState().imageSolutions.find(
+      s => s.fileItemId === fileItemId
+    );
+    if (updatedSolution) {
+      dbManager.saveSolution(updatedSolution).catch((error) => {
+        console.error("Failed to update solution in database:", error);
+      });
+    }
+  },
 
   /**
    * Clears all image items from the state.
@@ -129,21 +177,35 @@ export const useProblemsStore = create<ProblemsState>((set) => ({
    * This is the core fix for the concurrency issue. By appending to the previous state
    * within the `set` function, we ensure no solution overwrites another.
    */
-  addSolution: (newSolution) =>
+  addSolution: (newSolution) => {
     set((state) => ({
       imageSolutions: [...state.imageSolutions, newSolution],
-    })),
+    }));
+    
+    // 异步保存到数据库
+    dbManager.saveSolution(newSolution).catch((error) => {
+      console.error("Failed to save solution to database:", error);
+    });
+  },
 
   /**
-   * Removes solutions associated with a given set of image URLs.
+   * Removes solutions associated with a given set of file item IDs.
    * Useful for reprocessing failed items without creating duplicates.
    */
-  removeSolutionsByUrls: (urlsToRemove) =>
+  removeSolutionsByFileItemIds: (fileItemIdsToRemove) => {
     set((state) => ({
       imageSolutions: state.imageSolutions.filter(
-        (sol) => !urlsToRemove.has(sol.imageUrl),
+        (sol) => !fileItemIdsToRemove.has(sol.fileItemId),
       ),
-    })),
+    }));
+    
+    // 异步从数据库删除解决方案
+    fileItemIdsToRemove.forEach((fileItemId) => {
+      dbManager.deleteSolution(fileItemId).catch((error) => {
+        console.error("Failed to delete solution from database:", error);
+      });
+    });
+  },
 
   /**
    * Clears all solutions from the state.
@@ -151,8 +213,90 @@ export const useProblemsStore = create<ProblemsState>((set) => ({
   clearAllSolutions: () => set({ imageSolutions: [] }),
 
   // Simple setters for selection state
-  setSelectedImage: (selectedImage) => set({ selectedImage }),
-  setSelectedProblem: (selectedProblem) => set({ selectedProblem }),
+  setSelectedImage: (selectedImage) => {
+    set({ selectedImage });
+    
+    // 异步保存应用状态
+    const currentState = useProblemsStore.getState();
+    const appState: AppState = {
+      selectedImage,
+      selectedProblem: currentState.selectedProblem,
+    };
+    dbManager.saveAppState(appState).catch((error) => {
+      console.error("Failed to save app state:", error);
+    });
+  },
+  setSelectedProblem: (selectedProblem) => {
+    set({ selectedProblem });
+    
+    // 异步保存应用状态
+    const currentState = useProblemsStore.getState();
+    const appState: AppState = {
+      selectedImage: currentState.selectedImage,
+      selectedProblem,
+    };
+    dbManager.saveAppState(appState).catch((error) => {
+      console.error("Failed to save app state:", error);
+    });
+  },
 
   setWorking: (isWorking) => set({ isWorking }),
+
+  // Streaming text actions
+  setStreamingText: (streamingText) => set({ streamingText, isStreaming: true }),
+  clearStreamingText: () => set({ streamingText: "", isStreaming: false }),
+
+  // Persistence actions
+  loadFromDB: async () => {
+    try {
+      // 初始化数据库
+      await dbManager.initDB();
+      
+      // 加载文件项
+      const fileItems = await dbManager.loadAllFileItems();
+      
+      // 加载解决方案
+      const solutions = await dbManager.loadAllSolutions();
+      
+      // 加载应用状态
+      const appState = await dbManager.loadAppState();
+      
+      // 更新状态
+      set({
+        imageItems: fileItems,
+        imageSolutions: solutions,
+        selectedImage: appState?.selectedImage,
+        selectedProblem: appState?.selectedProblem ?? 0,
+      });
+      
+      console.log("Successfully loaded data from database");
+    } catch (error) {
+      console.error("Failed to load data from database:", error);
+    }
+  },
+
+  clearAllWithDB: async () => {
+    try {
+      // 清理 Object URLs
+      const currentItems = useProblemsStore.getState().imageItems;
+      currentItems.forEach((item) => URL.revokeObjectURL(item.url));
+      
+      // 清空数据库
+      await dbManager.clearAll();
+      
+      // 清空状态
+      set({
+        imageItems: [],
+        imageSolutions: [],
+        selectedImage: undefined,
+        selectedProblem: 0,
+        streamingText: "",
+        isStreaming: false,
+      });
+      
+      console.log("Successfully cleared all data");
+    } catch (error) {
+      console.error("Failed to clear data:", error);
+    }
+  },
 }));

@@ -53,7 +53,7 @@ export class GeminiAi {
     this.systemPrompt = prompt;
   }
 
-  async sendText(userText: string, model = "gemini-2.5-pro") {
+  async sendText(userText: string, model = "gemini-2.5-pro", onChunk?: (text: string) => void) {
     const contents = [];
 
     if (this.systemPrompt) {
@@ -81,6 +81,7 @@ export class GeminiAi {
     for await (const chunk of response) {
       if (chunk.text) {
         result += chunk.text;
+        onChunk?.(result);
       }
     }
     return result;
@@ -91,6 +92,7 @@ export class GeminiAi {
     mimeType: string,
     prompt?: string,
     model = "gemini-2.5-pro",
+    onChunk?: (text: string) => void,
   ) {
     const contents = [];
 
@@ -141,6 +143,7 @@ export class GeminiAi {
     for await (const chunk of response) {
       if (chunk.text) {
         result += chunk.text;
+        onChunk?.(result);
       }
     }
     return result;

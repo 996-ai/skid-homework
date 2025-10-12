@@ -122,3 +122,26 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom scrollbar styles for streaming text */
+.streaming-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.3) transparent;
+}
+
+.streaming-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.streaming-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.streaming-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 3px;
+}
+
+.streaming-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.5);
+}

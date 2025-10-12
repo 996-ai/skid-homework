@@ -56,6 +56,7 @@ export default function SettingsPage() {
   // input box states
   const [localGeminiKey, setLocalGeminiKey] = useState(geminiKey);
   const [localGeminiBaseUrl, setLocalGeminiBaseUrl] = useState(geminiBaseUrl);
+  const [localGeminiModel, setLocalGeminiModel] = useState(geminiModel);
 
   useEffect(() => {
     setLocalGeminiKey(geminiKey);
@@ -64,6 +65,10 @@ export default function SettingsPage() {
   useEffect(() => {
     setLocalGeminiBaseUrl(geminiBaseUrl);
   }, [geminiBaseUrl]);
+
+  useEffect(() => {
+    setLocalGeminiModel(geminiModel);
+  }, [geminiModel]);
 
   const [availableModels, setAvailableModels] = useState<GeminiModel[]>([]);
   const [modelPopoverOpen, setModelPopoverOpen] = useState(false);
@@ -82,6 +87,10 @@ export default function SettingsPage() {
 
   const applyGeminiKey = () => {
     setGeminiKey(localGeminiKey ?? "");
+  };
+
+  const applyGeminiModel = () => {
+    setGeminiModel(localGeminiModel ?? "");
   };
 
   const navigate = useNavigate();
@@ -207,10 +216,27 @@ export default function SettingsPage() {
                 </Command>
               </PopoverContent>
             </Popover>
-            {/* <Input */}
-            {/*   value={geminiModel} */}
-            {/*   onChange={(e) => setGeminiModel(e.target.value)} */}
-            {/* /> */}
+          </div>
+
+          {/* Custom Model Name Input */}
+          <div className="space-y-2">
+            <Label htmlFor="custom-model">Or Enter Custom Model Name</Label>
+            <Input
+              id="custom-model"
+              type="text"
+              placeholder="e.g., models/gemini-2.5-pro"
+              value={localGeminiModel || ""}
+              onChange={(e) => setLocalGeminiModel(e.target.value)}
+              onBlur={applyGeminiModel}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  applyGeminiModel();
+                }
+              }}
+            />
+            <p className="text-sm text-muted-foreground">
+              If your model is not listed above, type the full model name here.
+            </p>
           </div>
 
           {/* Thinking budget */}

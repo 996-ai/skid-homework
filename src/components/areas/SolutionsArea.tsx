@@ -14,6 +14,10 @@ import {
   type FileItem,
   type Solution,
 } from "@/store/problems-store";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import ProblemList from "../ProblemList";
 import SolutionViewer from "../SolutionViewer";
 import type { ImproveResponse } from "@/ai/response";
@@ -34,16 +38,19 @@ export default function SolutionsArea() {
     setSelectedProblem,
     updateProblem,
     isWorking,
+    streamingText,
+    isStreaming,
   } = useProblemsStore((s) => s);
   const viewerRef = useRef<HTMLElement | null>(null);
+  const streamingTextRef = useRef<HTMLDivElement | null>(null);
   // Build a solutions list that matches the visual order of the uploaded items.
   const orderedSolutions: OrderedSolution[] = useMemo(() => {
-    const byUrl = new Map(imageSolutions.map((s) => [s.imageUrl, s]));
+    const byFileItemId = new Map(imageSolutions.map((s) => [s.fileItemId, s]));
     return items
-      .filter((it) => byUrl.has(it.url)) // Only include items that have a solution entry.
+      .filter((it) => byFileItemId.has(it.id)) // Only include items that have a solution entry.
       .map((it) => ({
         item: it,
-        solutions: byUrl.get(it.url)!,
+        solutions: byFileItemId.get(it.id)!,
       }));
   }, [items, imageSolutions]); // Dependencies remain correct
 
@@ -105,13 +112,21 @@ export default function SolutionsArea() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentImageIdx, problems.length]); // Re-run when image or problems change.
 
+  // Effect to auto-scroll streaming text to bottom
+  useEffect(() => {
+    if (isStreaming && streamingTextRef.current) {
+      const container = streamingTextRef.current;
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [streamingText, isStreaming]);
+
   const updateSolution = (
     entry: OrderedSolution,
     solutionIdx: number,
     res: ImproveResponse,
   ) => {
     updateProblem(
-      entry.item.url,
+      entry.item.id,
       solutionIdx,
       res.improved_answer,
       res.improved_explanation,
@@ -129,6 +144,31 @@ export default function SolutionsArea() {
             className="outline-none"
             aria-label="Solutions keyboard focus region (Tab/Shift+Tab for problems, Space/Shift+Space for images)"
           >
+            {/* Streaming text display */}
+            {isStreaming && streamingText && (
+              <div className="mb-4 rounded-xl border border-blue-500/20 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 p-4 shadow-lg backdrop-blur-sm transition-all duration-300">
+                <div className="mb-3 flex items-center gap-3 text-sm font-medium text-blue-300">
+                  <div className="flex h-2 w-2 items-center justify-center">
+                    <div className="h-2 w-2 animate-pulse rounded-full bg-blue-400 shadow-sm shadow-blue-400/50"></div>
+                  </div>
+                  <span className="text-blue-200">AI 正在生成响应...</span>
+                </div>
+                <div 
+                  ref={streamingTextRef}
+                  className="streaming-scrollbar max-h-80 overflow-y-auto rounded-lg bg-slate-900/40 p-4 text-sm leading-relaxed scroll-smooth transition-all duration-200"
+                >
+                  <div className="prose prose-invert prose-sm max-w-none prose-headings:text-slate-200 prose-p:text-slate-300 prose-strong:text-slate-200 prose-code:text-blue-300 prose-code:bg-slate-800/50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-slate-800/50 prose-pre:border prose-pre:border-slate-700">
+                    <Markdown
+                      remarkPlugins={[remarkGfm, remarkMath]}
+                      rehypePlugins={[[rehypeKatex, { output: "html" }]]}
+                    >
+                      {streamingText}
+                    </Markdown>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Conditional rendering based on whether solutions are available. */}
             {!orderedSolutions.length ? (
               <div className="text-sm text-gray-400">
