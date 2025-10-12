@@ -1,5 +1,5 @@
 import { TabsTrigger } from "@radix-ui/react-tabs";
-import { Card, CardContent, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Tabs, TabsContent, TabsList } from "../ui/tabs";
 import {
   Collapsible,
@@ -8,6 +8,7 @@ import {
 } from "../ui/collapsible";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
+import { Badge } from "../ui/badge";
 import { useEffect, useMemo, useRef } from "react";
 import {
   useProblemsStore,
@@ -38,8 +39,6 @@ export default function SolutionsArea() {
     setSelectedProblem,
     updateProblem,
     isWorking,
-    streamingText,
-    isStreaming,
   } = useProblemsStore((s) => s);
   const viewerRef = useRef<HTMLElement | null>(null);
   const streamingTextRef = useRef<HTMLDivElement | null>(null);
@@ -100,6 +99,11 @@ export default function SolutionsArea() {
   const currentBundle =
     currentImageIdx >= 0 ? orderedSolutions[currentImageIdx] : null;
   const problems = currentBundle?.solutions.problems ?? [];
+  
+  // Get streaming text from current item
+  const currentItem = currentBundle?.item;
+  const streamingText = currentItem?.streamingText || "";
+  const isStreaming = currentItem?.isStreaming || false;
 
   // Effect to clamp the selectedProblem index to a valid range when data changes.
   useEffect(() => {
@@ -146,27 +150,31 @@ export default function SolutionsArea() {
           >
             {/* Streaming text display */}
             {isStreaming && streamingText && (
-              <div className="mb-4 rounded-xl border border-blue-500/20 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 p-4 shadow-lg backdrop-blur-sm transition-all duration-300">
-                <div className="mb-3 flex items-center gap-3 text-sm font-medium text-blue-300">
-                  <div className="flex h-2 w-2 items-center justify-center">
-                    <div className="h-2 w-2 animate-pulse rounded-full bg-blue-400 shadow-sm shadow-blue-400/50"></div>
+              <Card className="mb-4 border-primary/20 bg-primary/5">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="gap-1.5">
+                      <div className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+                      AI 正在生成响应...
+                    </Badge>
                   </div>
-                  <span className="text-blue-200">AI 正在生成响应...</span>
-                </div>
-                <div 
-                  ref={streamingTextRef}
-                  className="streaming-scrollbar max-h-80 overflow-y-auto rounded-lg bg-slate-900/40 p-4 text-sm leading-relaxed scroll-smooth transition-all duration-200"
-                >
-                  <div className="prose prose-invert prose-sm max-w-none prose-headings:text-slate-200 prose-p:text-slate-300 prose-strong:text-slate-200 prose-code:text-blue-300 prose-code:bg-slate-800/50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-slate-800/50 prose-pre:border prose-pre:border-slate-700">
-                    <Markdown
-                      remarkPlugins={[remarkGfm, remarkMath]}
-                      rehypePlugins={[[rehypeKatex, { output: "html" }]]}
-                    >
-                      {streamingText}
-                    </Markdown>
+                </CardHeader>
+                <CardContent>
+                  <div 
+                    ref={streamingTextRef}
+                    className="streaming-scrollbar max-h-80 overflow-y-auto rounded-lg bg-muted/40 p-4 text-sm leading-relaxed"
+                  >
+                    <div className="prose prose-invert prose-sm max-w-none prose-headings:text-slate-200 prose-p:text-slate-300 prose-strong:text-slate-200 prose-code:text-blue-300 prose-code:bg-slate-800/50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-slate-800/50 prose-pre:border prose-pre:border-slate-700">
+                      <Markdown
+                        remarkPlugins={[remarkGfm, remarkMath]}
+                        rehypePlugins={[[rehypeKatex, { output: "html" }]]}
+                      >
+                        {streamingText}
+                      </Markdown>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             )}
 
             {/* Conditional rendering based on whether solutions are available. */}

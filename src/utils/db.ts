@@ -295,6 +295,7 @@ class DatabaseManager {
       request.onsuccess = () => {
         const result = request.result;
         if (result) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { key, ...state } = result;
           resolve(state as AppState);
         } else {

@@ -23,12 +23,10 @@ export default function ScanPage() {
     addFileItems: addImageItems,
     updateItemStatus,
     removeImageItem, // Rename to avoid conflict with local function
-    clearAllItems,
     addSolution: addImageSolution,
     removeSolutionsByFileItemIds,
-    clearAllSolutions,
-    setStreamingText,
-    clearStreamingText,
+    setItemStreamingText,
+    clearItemStreamingText,
     loadFromDB,
     clearAllWithDB,
   } = useProblemsStore((s) => s);
@@ -208,7 +206,7 @@ ${geminiTraits}
               item.mimeType,
               undefined,
               geminiModel,
-              (text) => setStreamingText(text),
+              (text) => setItemStreamingText(item.id, text),
             ),
           );
 
@@ -221,7 +219,7 @@ ${geminiTraits}
           });
 
           updateItemStatus(item.id, "success");
-          clearStreamingText();
+          clearItemStreamingText(item.id);
         } catch (err) {
           console.error(
             `Failed to process ${item.id} after multiple retries:`,
@@ -241,7 +239,7 @@ ${geminiTraits}
           });
 
           updateItemStatus(item.id, "failed");
-          clearStreamingText();
+          clearItemStreamingText(item.id);
         }
       };
 

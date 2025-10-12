@@ -9,6 +9,8 @@ export type FileItem = {
   url: string; // Object URL for client-side preview
   source: "upload" | "camera"; // Origin of the image
   status: "success" | "pending" | "failed";
+  streamingText?: string;  // 新增：流式文本内容
+  isStreaming?: boolean;    // 新增：是否正在流式传输
 };
 
 // Type definition for the solution set of a single image.
@@ -32,8 +34,6 @@ export interface ProblemsState {
   selectedImage?: string;
   selectedProblem: number;
   isWorking: boolean;
-  streamingText: string;
-  isStreaming: boolean;
 
   // --- ACTIONS ---
 
@@ -62,8 +62,8 @@ export interface ProblemsState {
   setWorking: (isWorking: boolean) => void;
 
   // Actions for streaming text
-  setStreamingText: (text: string) => void;
-  clearStreamingText: () => void;
+  setItemStreamingText: (id: string, text: string) => void;
+  clearItemStreamingText: (id: string) => void;
 
   // Actions for persistence
   loadFromDB: () => Promise<void>;
@@ -77,8 +77,6 @@ export const useProblemsStore = create<ProblemsState>((set) => ({
   selectedImage: undefined,
   selectedProblem: 0,
   isWorking: false,
-  streamingText: "",
-  isStreaming: false,
 
   // --- ACTION IMPLEMENTATIONS ---
 
@@ -243,8 +241,20 @@ export const useProblemsStore = create<ProblemsState>((set) => ({
   setWorking: (isWorking) => set({ isWorking }),
 
   // Streaming text actions
-  setStreamingText: (streamingText) => set({ streamingText, isStreaming: true }),
-  clearStreamingText: () => set({ streamingText: "", isStreaming: false }),
+  setItemStreamingText: (id, text) => {
+    set((state) => ({
+      imageItems: state.imageItems.map((item) =>
+        item.id === id ? { ...item, streamingText: text, isStreaming: true } : item
+      ),
+    }));
+  },
+  clearItemStreamingText: (id) => {
+    set((state) => ({
+      imageItems: state.imageItems.map((item) =>
+        item.id === id ? { ...item, streamingText: "", isStreaming: false } : item
+      ),
+    }));
+  },
 
   // Persistence actions
   loadFromDB: async () => {
@@ -290,8 +300,6 @@ export const useProblemsStore = create<ProblemsState>((set) => ({
         imageSolutions: [],
         selectedImage: undefined,
         selectedProblem: 0,
-        streamingText: "",
-        isStreaming: false,
       });
       
       console.log("Successfully cleared all data");
