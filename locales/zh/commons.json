@@ -8,21 +8,20 @@
     "title": "上传照片"
   },
   "preview": {
-    "no-files": "没有文件 上传或拍照以开始",
     "drag-tip": "你可以把文件拖动到这个窗口中",
+    "no-files": "没有文件 上传或拍照以开始",
     "title": "预览"
   },
   "scan-page": {
     "donate-btn": "现在赞助",
-    "title": "扫描你的作业"
+    "title": "扫描你的作业",
+    "tip": "我们不会在未经授权时上传您的文件"
   },
   "solutions": {
     "analyzing": "正在分析... 正在从你的图片中提取问题和解决方案",
     "idle": "点击\"开始打滑\"将图片发送给AI以在这里查看结果",
     "title": "解决方案"
   },
-  "take-photo": "",
-  "upload": "",
   "upload-area": {
     "take-photo": "拍照",
     "upload": "上传文件",
@@ -30,5 +29,31 @@
   },
   "uploads-info": {
     "selected": "已选择"
+  },
+  "settings-page": {
+    "back": "返回",
+    "clear-input": "清空",
+    "api-credentials": {
+      "title": "API 凭证",
+      "desc": "输入在Google AI Studio 的API Key 来连接到Gemini"
+    },
+    "model": {
+      "title": "模型设置",
+      "desc": "选择模型和定义AI行为",
+      "sel": {
+        "title": "模型",
+        "empty": "选择一个模型...",
+        "unknown": "未知模型 ({{name, string}})",
+        "no-model-available": "没有可用模型"
+      }
+    },
+    "thinking": {
+      "title": "深度思考设置",
+      "default": "默认值: 8192 Tokens"
+    },
+    "traits": {
+      "title": "自定义提示词",
+      "desc": "定义AI 的个性, 角色或者指令"
+    }
   }
 }

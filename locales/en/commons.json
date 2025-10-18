@@ -8,21 +8,20 @@
     "title": "Add Images"
   },
   "preview": {
-    "no-files": "No files yet. Upload or take a photo to begin.",
     "drag-tip": "You can drag your files to this panel.",
+    "no-files": "No files yet. Upload or take a photo to begin.",
     "title": "Preview"
   },
   "scan-page": {
     "donate-btn": "Donate now",
-    "title": "Scan your homework"
+    "title": "Scan your homework",
+    "tip": "We never upload without your action."
   },
   "solutions": {
     "analyzing": "Analyzing... extracting problems and solutions from your images.",
     "idle": "No solutions yet. Add images and click \"Let's Skid\" to see results here.",
     "title": "Solutions"
   },
-  "take-photo": "take-photo",
-  "upload": "upload",
   "upload-area": {
     "take-photo": "Take Photo",
     "upload": "Upload Files",
@@ -30,5 +29,31 @@
   },
   "uploads-info": {
     "selected": "Selected"
+  },
+  "settings-page": {
+    "back": "Back",
+    "clear-input": "Clear",
+    "api-credentials": {
+      "title": "API Credentials",
+      "desc": "Enter your Google AI Studio API key to connect to Gemini."
+    },
+    "model": {
+      "title": "Model Configuration",
+      "desc": "Choose the model and define the AI's behavior.",
+      "sel": {
+        "title": "Model",
+        "empty": "Select a model...",
+        "unknown": "Unknown model ({{name, string}})",
+        "no-model-available": "No available models"
+      }
+    },
+    "thinking": {
+      "title": "Thinking Budget",
+      "default": "Default: 8192 Tokens"
+    },
+    "traits": {
+      "title": "System Prompt (Traits)",
+      "desc": "Define the AI's personality, role, or instructions"
+    }
   }
 }
