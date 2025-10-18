@@ -55,6 +55,22 @@
     "traits": {
       "title": "System Prompt (Traits)",
       "desc": "Define the AI's personality, role, or instructions"
+    },
+    "advanced": {
+      "title": "Advanced Settings",
+      "desc": "Please make sure you know what you are doing.",
+
+      "custom-base-url": {
+        "title": "Custom Gemini API base URL"
+      },
+      "image-post-processing": {
+        "title": "Image Post-processing",
+        "binarizing": "Enable binarizing"
+      },
+      "ui": {
+        "title": "UI",
+        "show-donate-btn": "Show donate button"
+      }
     }
   }
 }

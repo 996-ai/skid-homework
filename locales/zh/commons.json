@@ -55,6 +55,22 @@
     "traits": {
       "title": "自定义提示词",
       "desc": "定义AI 的个性, 角色或者指令"
+    },
+    "advanced": {
+      "title": "高级设置",
+      "desc": "请确保你知道你在做什么。",
+
+      "custom-base-url": {
+        "title": "自定义Gemini API URL"
+      },
+      "image-post-processing": {
+        "title": "图像后期处理",
+        "binarizing": "启用二值化 (Binarizing)"
+      },
+      "ui": {
+        "title": "UI",
+        "show-donate-btn": "显示赞助按钮"
+      }
     }
   }
 }
