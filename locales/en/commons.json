@@ -44,7 +44,8 @@
         "title": "Model",
         "empty": "Select a model...",
         "unknown": "Unknown model ({{name, string}})",
-        "no-model-available": "No available models"
+        "no-model-available": "No available models",
+        "search-placeholder": "Search model..."
       }
     },
     "thinking": {

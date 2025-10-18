@@ -44,7 +44,8 @@
         "title": "模型",
         "empty": "选择一个模型...",
         "unknown": "未知模型 ({{name, string}})",
-        "no-model-available": "没有可用模型"
+        "no-model-available": "没有可用模型",
+        "search-placeholder": "搜索模型..."
       }
     },
     "thinking": {
