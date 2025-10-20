@@ -25,7 +25,10 @@
   "upload-area": {
     "take-photo": "Take Photo",
     "upload": "Upload Files",
-    "upload-tip": "PDF and image files are supported"
+    "upload-tip": "PDF and image files are supported",
+    "camera-tip": {
+      "title": "Taking photos on different devices"
+    }
   },
   "uploads-info": {
     "selected": "Selected"
