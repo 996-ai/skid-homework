@@ -10,35 +10,112 @@
   "preview": {
     "drag-tip": "你可以把文件拖动到这个窗口中",
     "no-files": "没有文件 上传或拍照以开始",
-    "title": "预览"
+    "title": "预览",
+    "image-alt": "作业预览图",
+    "file-type": {
+      "pdf": "PDF",
+      "unknown": "未知类型"
+    },
+    "remove-aria": "移除图片",
+    "drop-cancel": "拖到这里取消"
   },
   "scan-page": {
     "donate-btn": "现在赞助",
     "title": "扫描你的作业",
-    "tip": "我们不会在未经授权时上传您的文件"
+    "tip": "我们不会在未经授权时上传您的文件",
+    "toasts": {
+      "no-model": {
+        "title": "就差一步",
+        "description": "请在设置中选择一个 Gemini 模型后再开始打滑！"
+      },
+      "no-key": {
+        "title": "就差一步",
+        "description": "请先在设置中填入 Gemini API Key。"
+      },
+      "all-processed": {
+        "title": "全部已处理",
+        "description": "没有待处理或失败的图片了。"
+      },
+      "working": {
+        "title": "处理中...",
+        "description_one": "正在将 {{count}} 个文件发送给 Gemini... 正在帮你节省时间...",
+        "description_other": "正在将 {{count}} 个文件发送给 Gemini... 正在帮你节省时间..."
+      },
+      "error": {
+        "title": "发生意外错误",
+        "description": "处理过程中出了点问题，请查看控制台。"
+      },
+      "done": {
+        "title": "全部完成！",
+        "description": "你的作业已经处理完成。"
+      }
+    },
+    "errors": {
+      "processing-failed": {
+        "problem": "多次重试后仍然处理失败。",
+        "answer": "请检查控制台中的错误并重试。",
+        "explanation": "{{error}}"
+      }
+    },
+    "footer": {
+      "license": "基于 GPL-3.0 许可发布。",
+      "slogan": "学生的时间很宝贵",
+      "source": "源代码"
+    }
   },
   "solutions": {
     "analyzing": "正在分析... 正在从你的图片中提取问题和解决方案",
     "idle": "点击\"开始打滑\"将图片发送给AI以在这里查看结果",
-    "title": "解决方案"
+    "title": "解决方案",
+    "status": {
+      "success": "这张图片没有检测到题目。",
+      "stream": "正在推理...",
+      "pending": "正在处理中...",
+      "failed": "处理失败，请重试。"
+    },
+    "focus-region-aria": "解决方案键盘聚焦区域（Tab/Shift+Tab 切换题目，空格/Shift+空格切换图片）",
+    "tabs": {
+      "fallback": "文件 {{index}}"
+    },
+    "photo-label": "照片 {{index}} • {{source}}",
+    "toggle-preview": "切换预览",
+    "streaming": {
+      "title": "AI 输出",
+      "placeholder": "AI 正在思考..."
+    }
   },
   "upload-area": {
     "take-photo": "拍照",
     "upload": "上传文件",
     "upload-tip": "支持处理PDF和图片文件",
+    "camera-help-aria": "相机使用说明",
     "camera-tip": {
-      "title": "在不同的设备上拍摄照片"
+      "title": "在不同的设备上拍摄照片",
+      "intro": "「<takePhoto>拍照</takePhoto>」按钮会调用浏览器的原生相机选择器（<capture>capture=\"environment\"</capture>）。在手机上会直接打开相机，在桌面端通常会退回到文件选择窗口。",
+      "tips": [
+        "尽量利用自然光线，避免眩光。",
+        "让题目占满画面，保持文字清晰。",
+        "一张照片拍一题，识别效果更好。"
+      ],
+      "close": "知道了"
     }
   },
   "uploads-info": {
     "selected": "已选择"
   },
   "settings-page": {
+    "heading": "SkidHomework 设置",
     "back": "返回",
     "clear-input": "清空",
     "api-credentials": {
       "title": "API 凭证",
-      "desc": "输入在Google AI Studio 的API Key 来连接到Gemini"
+      "desc": "输入在Google AI Studio 的API Key 来连接到Gemini",
+      "label": "Gemini API Key",
+      "placeholder": "在这里填写你的 API Key",
+      "status": {
+        "set": "你的 API Key 已设置并被安全保存。",
+        "unset": "你还没有设置 API Key。"
+      }
     },
     "model": {
       "title": "模型设置",
@@ -53,18 +130,20 @@
     },
     "thinking": {
       "title": "深度思考设置",
-      "default": "默认值: 8192 Tokens"
+      "default": "默认值: 8192 Tokens",
+      "tokens-unit": "Tokens"
     },
     "traits": {
       "title": "自定义提示词",
-      "desc": "定义AI 的个性, 角色或者指令"
+      "desc": "定义AI 的个性, 角色或者指令",
+      "placeholder": "例如：你是一名友善而专业的助教，擅长一步步讲解。"
     },
     "advanced": {
       "title": "高级设置",
       "desc": "请确保你知道你在做什么。",
-
       "custom-base-url": {
-        "title": "自定义Gemini API URL"
+        "title": "自定义Gemini API URL",
+        "placeholder": "https://generativelanguage.googleapis.com"
       },
       "image-post-processing": {
         "title": "图像后期处理",
@@ -75,5 +154,96 @@
         "show-donate-btn": "显示赞助按钮"
       }
     }
+  },
+  "problem-list": {
+    "item-label": "题目 {{index}}"
+  },
+  "init-page": {
+    "tagline": "本地 • 私密 • 免费",
+    "headline": {
+      "highlight": "欢迎来到 SkidHomework",
+      "subtitle": "摆脱作业内卷。"
+    },
+    "intro": "喜欢可汗学院式的自学，却常被堆积如山的作业拖住脚步？SkidHomework 本地运行，尊重你的隐私，让你把精力放在学习上，而不是重复劳动。",
+    "features": {
+      "telemetry": "无遥测、无骚扰请求，只使用 Gemini API。",
+      "camera": "拍下作业，立刻获得逐步讲解。",
+      "setup": "快速上手——粘贴 Gemini API Key 就能开始。"
+    },
+    "form": {
+      "key-placeholder": "Gemini API Key",
+      "submit": "帮我省时间！",
+      "advanced": {
+        "title": "高级选项",
+        "base-url-label": "Gemini API 基础地址（可选）",
+        "base-url-placeholder": "https://generativelanguage.googleapis.com",
+        "base-url-helper": "留空将使用谷歌默认 API 端点。"
+      },
+      "api-hint": "前往 <link>Google AI Studio</link> 获取 API Key。",
+      "storage-note": "我们使用加密浏览器存储在本地保存你的密钥，绝不会上传到服务器。"
+    },
+    "preview": {
+      "title": "作业相机",
+      "ocr": "OCR",
+      "steps": "步骤",
+      "hints": "提示"
+    },
+    "footer": {
+      "notice": "基于 GPLv3 许可，由 cubewhy 创建。",
+      "source": "源代码"
+    }
+  },
+  "solution-viewer": {
+    "progress": {
+      "prefix": "题目",
+      "suffix": "/ 共 {{total}} 题"
+    },
+    "answer": "答案",
+    "explanation": "解析",
+    "copy": {
+      "button": "复制答案",
+      "success": {
+        "title": "已复制",
+        "description": "答案已复制到剪贴板。"
+      },
+      "failed": {
+        "title": "复制失败",
+        "description": "请手动复制。"
+      }
+    },
+    "source-image": "原始图片：",
+    "open-preview": "打开预览",
+    "navigation": {
+      "prev-problem": "上一题",
+      "next-problem": "下一题",
+      "prev-image": "⟵ 图片",
+      "next-image": "图片 ⟶"
+    }
+  },
+  "improve-dialog": {
+    "trigger": "优化答案",
+    "title": "优化答案",
+    "description": "基于当前答案和你的提示，让 AI 生成更详细的解答。",
+    "placeholder": "例如：请添加更详细的步骤……",
+    "submit": "提交",
+    "toasts": {
+      "no-key": {
+        "title": "就差一步",
+        "description": "请先在设置中配置 API Key 才能使用 AI。"
+      },
+      "processing": {
+        "title": "处理中",
+        "description": "正在使用 AI 优化你的解答，请耐心等待..."
+      },
+      "failed": {
+        "title": "优化失败",
+        "parse": "解析响应失败，请打开开发者工具查看更多详情。",
+        "description": "出错了：{{error}}"
+      }
+    }
+  },
+  "sources": {
+    "upload": "本地上传",
+    "camera": "拍摄"
   }
 }

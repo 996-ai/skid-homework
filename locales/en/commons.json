@@ -10,35 +10,112 @@
   "preview": {
     "drag-tip": "You can drag your files to this panel.",
     "no-files": "No files yet. Upload or take a photo to begin.",
-    "title": "Preview"
+    "title": "Preview",
+    "image-alt": "Homework preview",
+    "file-type": {
+      "pdf": "PDF",
+      "unknown": "Unknown type"
+    },
+    "remove-aria": "Remove image",
+    "drop-cancel": "Drag here to cancel"
   },
   "scan-page": {
     "donate-btn": "Donate now",
     "title": "Scan your homework",
-    "tip": "We never upload without your action."
+    "tip": "We never upload without your action.",
+    "toasts": {
+      "no-model": {
+        "title": "You're almost there",
+        "description": "Please specify a Gemini model in settings to start skidding!"
+      },
+      "no-key": {
+        "title": "You're almost there",
+        "description": "Please set a Gemini API key before you scan your homework."
+      },
+      "all-processed": {
+        "title": "All images processed",
+        "description": "There are no pending or failed images to scan."
+      },
+      "working": {
+        "title": "Working...",
+        "description_one": "Sending {{count}} file to Gemini... Your time is being saved...",
+        "description_other": "Sending {{count}} files to Gemini... Your time is being saved..."
+      },
+      "error": {
+        "title": "An unexpected error occurred",
+        "description": "Something went wrong during the process. Please check the console."
+      },
+      "done": {
+        "title": "All done!",
+        "description": "Your homework has been processed."
+      }
+    },
+    "errors": {
+      "processing-failed": {
+        "problem": "Processing failed after multiple retries.",
+        "answer": "Please check the console for errors and try again.",
+        "explanation": "{{error}}"
+      }
+    },
+    "footer": {
+      "license": "Licensed under GPL-3.0.",
+      "slogan": "Students' lives matter",
+      "source": "Source code"
+    }
   },
   "solutions": {
     "analyzing": "Analyzing... extracting problems and solutions from your images.",
     "idle": "No solutions yet. Add images and click \"Let's Skid\" to see results here.",
-    "title": "Solutions"
+    "title": "Solutions",
+    "status": {
+      "success": "No problems were detected for this image.",
+      "stream": "Reasoning...",
+      "pending": "Processing in progress...",
+      "failed": "Failed to process this image. Please try again."
+    },
+    "focus-region-aria": "Solutions keyboard focus region (Tab/Shift+Tab for problems, Space/Shift+Space for images)",
+    "tabs": {
+      "fallback": "File {{index}}"
+    },
+    "photo-label": "Photo {{index}} • {{source}}",
+    "toggle-preview": "Toggle Preview",
+    "streaming": {
+      "title": "AI Output",
+      "placeholder": "AI is thinking..."
+    }
   },
   "upload-area": {
     "take-photo": "Take Photo",
     "upload": "Upload Files",
     "upload-tip": "PDF and image files are supported",
+    "camera-help-aria": "Camera help",
     "camera-tip": {
-      "title": "Taking photos on different devices"
+      "title": "Taking photos on different devices",
+      "intro": "The <takePhoto>Take Photo</takePhoto> button uses the browser's native camera picker (<capture>capture=\"environment\"</capture>). On phones, it opens the camera directly. On desktops, it usually falls back to the file chooser.",
+      "tips": [
+        "Prefer natural light and avoid glare.",
+        "Fill the frame with the problem. Keep text sharp.",
+        "One question per shot yields better recognition."
+      ],
+      "close": "Got it"
     }
   },
   "uploads-info": {
     "selected": "Selected"
   },
   "settings-page": {
+    "heading": "SkidHomework Settings",
     "back": "Back",
     "clear-input": "Clear",
     "api-credentials": {
       "title": "API Credentials",
-      "desc": "Enter your Google AI Studio API key to connect to Gemini."
+      "desc": "Enter your Google AI Studio API key to connect to Gemini.",
+      "label": "Gemini API Key",
+      "placeholder": "Enter your API key here",
+      "status": {
+        "set": "Your API key is set and stored securely.",
+        "unset": "Your API key is not set."
+      }
     },
     "model": {
       "title": "Model Configuration",
@@ -53,18 +130,20 @@
     },
     "thinking": {
       "title": "Thinking Budget",
-      "default": "Default: 8192 Tokens"
+      "default": "Default: 8192 Tokens",
+      "tokens-unit": "Tokens"
     },
     "traits": {
       "title": "System Prompt (Traits)",
-      "desc": "Define the AI's personality, role, or instructions"
+      "desc": "Define the AI's personality, role, or instructions",
+      "placeholder": "e.g., You are a helpful assistant that speaks in a friendly and professional tone."
     },
     "advanced": {
       "title": "Advanced Settings",
       "desc": "Please make sure you know what you are doing.",
-
       "custom-base-url": {
-        "title": "Custom Gemini API base URL"
+        "title": "Custom Gemini API base URL",
+        "placeholder": "https://generativelanguage.googleapis.com"
       },
       "image-post-processing": {
         "title": "Image Post-processing",
@@ -75,5 +154,96 @@
         "show-donate-btn": "Show donate button"
       }
     }
+  },
+  "problem-list": {
+    "item-label": "Problem {{index}}"
+  },
+  "init-page": {
+    "tagline": "Local • Private • Free",
+    "headline": {
+      "highlight": "Welcome to SkidHomework",
+      "subtitle": "Escape the homework grind."
+    },
+    "intro": "Prefer Khan Academy–style self-study but still get stuck with endless assignments? SkidHomework runs locally, respects your privacy, and helps you focus on learning instead of busywork.",
+    "features": {
+      "telemetry": "No telemetry or spammy calls. Just the Gemini API.",
+      "camera": "Snap homework and get step-by-step help.",
+      "setup": "Fast setup — paste your Gemini API key and go."
+    },
+    "form": {
+      "key-placeholder": "Gemini API Key",
+      "submit": "Get My Time Back!",
+      "advanced": {
+        "title": "Advanced",
+        "base-url-label": "Gemini API Base URL (optional)",
+        "base-url-placeholder": "https://generativelanguage.googleapis.com",
+        "base-url-helper": "Leave blank to use the default Google API endpoint."
+      },
+      "api-hint": "Get an API key at <link>Google AI Studio</link>.",
+      "storage-note": "We store your key locally using encrypted browser storage and never send it to our servers."
+    },
+    "preview": {
+      "title": "Homework Camera",
+      "ocr": "OCR",
+      "steps": "Steps",
+      "hints": "Hints"
+    },
+    "footer": {
+      "notice": "Licensed under GPLv3, created by cubewhy.",
+      "source": "Source Code"
+    }
+  },
+  "solution-viewer": {
+    "progress": {
+      "prefix": "Problem",
+      "suffix": "of {{total}}"
+    },
+    "answer": "Answer",
+    "explanation": "Explanation",
+    "copy": {
+      "button": "Copy answer",
+      "success": {
+        "title": "Copied",
+        "description": "Answer copied to clipboard."
+      },
+      "failed": {
+        "title": "Copy failed",
+        "description": "Please copy manually."
+      }
+    },
+    "source-image": "Source image:",
+    "open-preview": "open preview",
+    "navigation": {
+      "prev-problem": "Prev",
+      "next-problem": "Next",
+      "prev-image": "⟵ Image",
+      "next-image": "Image ⟶"
+    }
+  },
+  "improve-dialog": {
+    "trigger": "Improve the Solution",
+    "title": "Improve the Solution",
+    "description": "Generate a more detailed solution using the current solution and your prompt.",
+    "placeholder": "Make it more detailed...",
+    "submit": "Submit",
+    "toasts": {
+      "no-key": {
+        "title": "You're almost there",
+        "description": "You need to set your API key in settings to use the AI."
+      },
+      "processing": {
+        "title": "Processing",
+        "description": "Improving your solution with AI...Please wait for a while..."
+      },
+      "failed": {
+        "title": "Failed to improve your solution",
+        "parse": "Failed to parse response, see the developer tools for more details.",
+        "description": "Something went wrong: {{error}}"
+      }
+    }
+  },
+  "sources": {
+    "upload": "Upload",
+    "camera": "Camera"
   }
 }
