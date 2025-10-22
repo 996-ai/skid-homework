@@ -163,6 +163,27 @@
         "error": "Keep at least one AI source."
       }
     },
+    "appearance": {
+      "title": "Appearance & Language",
+      "desc": "Choose how SkidHomework looks and which language it uses.",
+      "theme": {
+        "label": "Theme",
+        "desc": "Use the system preference or pick a fixed mode.",
+        "options": {
+          "system": "System",
+          "light": "Light",
+          "dark": "Dark"
+        }
+      },
+      "language": {
+        "label": "Language",
+        "desc": "Switch the interface language.",
+        "options": {
+          "en": "English",
+          "zh": "中文"
+        }
+      }
+    },
     "model": {
       "title": "Model Configuration",
       "desc": "Choose or type the model name used for requests.",

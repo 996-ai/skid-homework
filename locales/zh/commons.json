@@ -163,6 +163,27 @@
         "error": "至少保留一个 AI 源。"
       }
     },
+    "appearance": {
+      "title": "界面与语言",
+      "desc": "自定义界面主题和显示语言。",
+      "theme": {
+        "label": "主题模式",
+        "desc": "使用系统偏好或手动指定明暗模式。",
+        "options": {
+          "system": "跟随系统",
+          "light": "浅色",
+          "dark": "深色"
+        }
+      },
+      "language": {
+        "label": "界面语言",
+        "desc": "切换界面显示语言。",
+        "options": {
+          "en": "English",
+          "zh": "中文"
+        }
+      }
+    },
     "model": {
       "title": "模型配置",
       "desc": "选择或手动填写请求所使用的模型。",
