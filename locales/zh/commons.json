@@ -9,6 +9,7 @@
   },
   "preview": {
     "drag-tip": "你可以把文件拖动到这个窗口中",
+    "drag-tip-mobile": "轻触卡片即可放大，左右滑动快速浏览。",
     "no-files": "没有文件 上传或拍照以开始",
     "title": "预览",
     "image-alt": "作业预览图",
@@ -23,6 +24,17 @@
     "donate-btn": "现在赞助",
     "title": "扫描你的作业",
     "tip": "我们不会在未经授权时上传您的文件",
+    "mobile": {
+      "status": "已有 {{count}} 个文件",
+      "status_plural": "已有 {{count}} 个文件",
+      "empty": "先添加照片或 PDF 开始使用。",
+      "hint-ready": "可以开始识别了，准备好后点击「开始打滑」。",
+      "hint-pdf": "启用 Gemini 源即可支持 PDF 上传。",
+      "tabs": {
+        "capture": "采集",
+        "preview": "预览"
+      }
+    },
     "toasts": {
       "no-model": {
         "title": "需要模型",
@@ -76,6 +88,7 @@
     "analyzing": "正在分析... 正在从你的图片中提取问题和解决方案",
     "idle": "点击\"开始打滑\"将图片发送给AI以在这里查看结果",
     "title": "解决方案",
+    "gesture-hint": "左右滑动切换题目。",
     "status": {
       "success": "这张图片没有检测到题目。",
       "stream": "正在推理...",
