@@ -25,12 +25,12 @@
     "tip": "We never upload without your action.",
     "toasts": {
       "no-model": {
-        "title": "You're almost there",
-        "description": "Please specify a Gemini model in settings to start skidding!"
+        "title": "Model required",
+        "description": "Please choose a model for {{provider}} in Settings before scanning."
       },
       "no-key": {
         "title": "You're almost there",
-        "description": "Please set a Gemini API key before you scan your homework."
+        "description": "Please set an API key for {{provider}} in Settings."
       },
       "all-processed": {
         "title": "All images processed",
@@ -38,8 +38,7 @@
       },
       "working": {
         "title": "Working...",
-        "description_one": "Sending {{count}} file to Gemini... Your time is being saved...",
-        "description_other": "Sending {{count}} files to Gemini... Your time is being saved..."
+        "description": "Sending {{count}} file(s) to your AI sources..."
       },
       "error": {
         "title": "An unexpected error occurred",
@@ -48,6 +47,14 @@
       "done": {
         "title": "All done!",
         "description": "Your homework has been processed."
+      },
+      "no-source": {
+        "title": "No AI sources configured",
+        "description": "Enable at least one AI provider with an API key in Settings before scanning."
+      },
+      "pdf-blocked": {
+        "title": "PDF uploads disabled",
+        "description": "Enable a Gemini source to process PDF files."
       }
     },
     "errors": {
@@ -55,7 +62,9 @@
         "problem": "Processing failed after multiple retries.",
         "answer": "Please check the console for errors and try again.",
         "explanation": "{{error}}"
-      }
+      },
+      "missing-key": "Missing API key for {{provider}}.",
+      "parsing-failed": "Failed to parse the AI response."
     },
     "footer": {
       "license": "Licensed under GPL-3.0.",
@@ -71,7 +80,8 @@
       "success": "No problems were detected for this image.",
       "stream": "Reasoning...",
       "pending": "Processing in progress...",
-      "failed": "Failed to process this image. Please try again."
+      "failed": "Failed to process this image. Please try again.",
+      "success-with-provider": "Solved by {{provider}}."
     },
     "focus-region-aria": "Solutions keyboard focus region (Tab/Shift+Tab for problems, Space/Shift+Space for images)",
     "tabs": {
@@ -87,7 +97,7 @@
   "upload-area": {
     "take-photo": "Take Photo",
     "upload": "Upload Files",
-    "upload-tip": "PDF and image files are supported",
+    "upload-tip": "Images are supported. PDFs require an active Gemini source.",
     "camera-help-aria": "Camera help",
     "camera-tip": {
       "title": "Taking photos on different devices",
@@ -98,7 +108,8 @@
         "One question per shot yields better recognition."
       ],
       "close": "Got it"
-    }
+    },
+    "pdf-disabled": "PDF uploads are available only when a Gemini source is enabled."
   },
   "uploads-info": {
     "selected": "Selected"
@@ -107,43 +118,98 @@
     "heading": "SkidHomework Settings",
     "back": "Back",
     "clear-input": "Clear",
+    "reset": "Reset",
     "api-credentials": {
       "title": "API Credentials",
-      "desc": "Enter your Google AI Studio API key to connect to Gemini.",
-      "label": "Gemini API Key",
-      "placeholder": "Enter your API key here",
-      "status": {
-        "set": "Your API key is set and stored securely.",
-        "unset": "Your API key is not set."
+      "desc": "Store API keys locally for each AI provider. They never leave your browser.",
+      "label": "API Key",
+      "placeholder": "Enter your {{provider}} API key",
+      "applied": "API key saved.",
+      "name": {
+        "label": "Source name",
+        "placeholder": "Friendly name shown in the app"
+      }
+    },
+    "sources": {
+      "title": "AI Sources",
+      "desc": "Manage enabled AI providers and choose which one to configure.",
+      "active": {
+        "label": "Active source",
+        "badge": "Active"
+      },
+      "enabled": {
+        "label": "Enabled sources",
+        "toggle": "Enabled"
+      },
+      "option": "{{name}} • {{provider}}",
+      "providers": {
+        "gemini": "Gemini",
+        "openai": "OpenAI"
+      },
+      "add": {
+        "label": "Add AI source",
+        "title": "Add AI source",
+        "provider": "Provider",
+        "name": "Display name (optional)",
+        "name-placeholder": "e.g. Classroom Gemini",
+        "confirm": "Add source",
+        "cancel": "Cancel",
+        "success": "Added {{name}}."
+      },
+      "make-active": "Set active",
+      "remove": {
+        "label": "Remove source",
+        "success": "Removed {{name}}.",
+        "error": "Keep at least one AI source."
       }
     },
     "model": {
       "title": "Model Configuration",
-      "desc": "Choose the model and define the AI's behavior.",
+      "desc": "Choose or type the model name used for requests.",
       "sel": {
-        "title": "Model",
-        "empty": "Select a model...",
-        "unknown": "Unknown model ({{name, string}})",
-        "no-model-available": "No available models",
-        "search-placeholder": "Search model..."
+        "search": "Search model...",
+        "empty": "No models found.",
+        "none": "No model selected",
+        "unknown": "Unknown model ({{name}})"
+      },
+      "refresh": "Refresh models",
+      "manual": {
+        "title": "Custom model",
+        "placeholder": "Model identifier",
+        "desc": "Enter a model name manually if it is not listed."
+      },
+      "fetch": {
+        "error": "Failed to fetch models for {{provider}}. Check your API key or base URL."
       }
     },
     "thinking": {
-      "title": "Thinking Budget",
-      "default": "Default: 8192 Tokens",
-      "tokens-unit": "Tokens"
+      "title": "Thinking Settings",
+      "desc": "Adjust advanced thinking parameters for supported providers.",
+      "budget": "Thinking budget",
+      "tokens-unit": "tokens"
     },
     "traits": {
       "title": "System Prompt (Traits)",
-      "desc": "Define the AI's personality, role, or instructions",
+      "desc": "Define the assistant's persona or extra instructions.",
       "placeholder": "e.g., You are a helpful assistant that speaks in a friendly and professional tone."
+    },
+    "openai": {
+      "poll-interval": {
+        "title": "Polling interval (ms)",
+        "desc": "How long to wait between response status checks."
+      },
+      "poll-timeout": {
+        "title": "Polling timeout (ms)",
+        "desc": "Maximum time to wait for a response before failing."
+      }
     },
     "advanced": {
       "title": "Advanced Settings",
-      "desc": "Please make sure you know what you are doing.",
+      "desc": "Extras that affect uploads and the interface.",
       "custom-base-url": {
-        "title": "Custom Gemini API base URL",
-        "placeholder": "https://generativelanguage.googleapis.com"
+        "title": "Custom API base URL",
+        "placeholder": "https://example.com/v1",
+        "helper": "Leave blank to use the default endpoint for {{provider}}."
       },
       "image-post-processing": {
         "title": "Image Post-processing",
@@ -171,16 +237,20 @@
       "setup": "Fast setup — paste your Gemini API key and go."
     },
     "form": {
-      "key-placeholder": "Gemini API Key",
+      "key-placeholder": "{{provider}} API Key",
       "submit": "Get My Time Back!",
       "advanced": {
         "title": "Advanced",
-        "base-url-label": "Gemini API Base URL (optional)",
-        "base-url-placeholder": "https://generativelanguage.googleapis.com",
-        "base-url-helper": "Leave blank to use the default Google API endpoint."
+        "base-url-label": "API Base URL (optional)",
+        "base-url-placeholder": "Default endpoint for {{provider}}",
+        "base-url-helper": "Leave blank to use the default endpoint for {{provider}}."
       },
       "api-hint": "Get an API key at <link>Google AI Studio</link>.",
-      "storage-note": "We store your key locally using encrypted browser storage and never send it to our servers."
+      "storage-note": "We store your key locally using encrypted browser storage and never send it to our servers.",
+      "provider": {
+        "label": "AI provider"
+      },
+      "api-hint-openai": "Get an API key at <link>OpenAI Dashboard</link>."
     },
     "preview": {
       "title": "Homework Camera",
@@ -229,7 +299,7 @@
     "toasts": {
       "no-key": {
         "title": "You're almost there",
-        "description": "You need to set your API key in settings to use the AI."
+        "description": "Please set an API key for {{provider}} in Settings to continue."
       },
       "processing": {
         "title": "Processing",
@@ -239,6 +309,10 @@
         "title": "Failed to improve your solution",
         "parse": "Failed to parse response, see the developer tools for more details.",
         "description": "Something went wrong: {{error}}"
+      },
+      "no-source": {
+        "title": "No AI sources",
+        "description": "Enable at least one AI provider in Settings before improving a solution."
       }
     }
   },

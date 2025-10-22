@@ -25,21 +25,20 @@
     "tip": "我们不会在未经授权时上传您的文件",
     "toasts": {
       "no-model": {
-        "title": "就差一步",
-        "description": "请在设置中选择一个 Gemini 模型后再开始打滑！"
+        "title": "需要模型",
+        "description": "请先在设置中为 {{provider}} 选择模型。"
       },
       "no-key": {
-        "title": "就差一步",
-        "description": "请先在设置中填入 Gemini API Key。"
+        "title": "还差一步",
+        "description": "请在设置中为 {{provider}} 填写 API 密钥。"
       },
       "all-processed": {
         "title": "全部已处理",
         "description": "没有待处理或失败的图片了。"
       },
       "working": {
-        "title": "处理中...",
-        "description_one": "正在将 {{count}} 个文件发送给 Gemini... 正在帮你节省时间...",
-        "description_other": "正在将 {{count}} 个文件发送给 Gemini... 正在帮你节省时间..."
+        "title": "正在处理...",
+        "description": "正在将 {{count}} 个文件发送到 AI 源..."
       },
       "error": {
         "title": "发生意外错误",
@@ -48,6 +47,14 @@
       "done": {
         "title": "全部完成！",
         "description": "你的作业已经处理完成。"
+      },
+      "no-source": {
+        "title": "尚未配置 AI 源",
+        "description": "请在设置中启用至少一个已配置密钥的 AI 提供商后再开始扫描。"
+      },
+      "pdf-blocked": {
+        "title": "PDF 上传已禁用",
+        "description": "要处理 PDF，请启用 Gemini 源。"
       }
     },
     "errors": {
@@ -55,7 +62,9 @@
         "problem": "多次重试后仍然处理失败。",
         "answer": "请检查控制台中的错误并重试。",
         "explanation": "{{error}}"
-      }
+      },
+      "missing-key": "{{provider}} 尚未配置 API 密钥。",
+      "parsing-failed": "解析 AI 返回内容失败。"
     },
     "footer": {
       "license": "基于 GPL-3.0 许可发布。",
@@ -71,7 +80,8 @@
       "success": "这张图片没有检测到题目。",
       "stream": "正在推理...",
       "pending": "正在处理中...",
-      "failed": "处理失败，请重试。"
+      "failed": "处理失败，请重试。",
+      "success-with-provider": "由 {{provider}} 处理成功。"
     },
     "focus-region-aria": "解决方案键盘聚焦区域（Tab/Shift+Tab 切换题目，空格/Shift+空格切换图片）",
     "tabs": {
@@ -87,7 +97,7 @@
   "upload-area": {
     "take-photo": "拍照",
     "upload": "上传文件",
-    "upload-tip": "支持处理PDF和图片文件",
+    "upload-tip": "支持图片；PDF 需要启用 Gemini 源。",
     "camera-help-aria": "相机使用说明",
     "camera-tip": {
       "title": "在不同的设备上拍摄照片",
@@ -98,7 +108,8 @@
         "一张照片拍一题，识别效果更好。"
       ],
       "close": "知道了"
-    }
+    },
+    "pdf-disabled": "仅在启用 Gemini 源时支持 PDF 上传。"
   },
   "uploads-info": {
     "selected": "已选择"
@@ -106,52 +117,107 @@
   "settings-page": {
     "heading": "SkidHomework 设置",
     "back": "返回",
-    "clear-input": "清空",
+    "clear-input": "清除",
+    "reset": "重置",
     "api-credentials": {
-      "title": "API 凭证",
-      "desc": "输入在Google AI Studio 的API Key 来连接到Gemini",
-      "label": "Gemini API Key",
-      "placeholder": "在这里填写你的 API Key",
-      "status": {
-        "set": "你的 API Key 已设置并被安全保存。",
-        "unset": "你还没有设置 API Key。"
+      "title": "API 凭据",
+      "desc": "为每个 AI 提供商在本地保存 API 密钥，我们不会上传。",
+      "label": "API 密钥",
+      "placeholder": "请输入 {{provider}} 的 API 密钥",
+      "applied": "API 密钥已保存。",
+      "name": {
+        "label": "来源名称",
+        "placeholder": "展示在界面中的昵称"
+      }
+    },
+    "sources": {
+      "title": "AI 源管理",
+      "desc": "管理可用的 AI 提供商，并选择要配置的目标。",
+      "active": {
+        "label": "当前编辑的 AI 源",
+        "badge": "正在编辑"
+      },
+      "enabled": {
+        "label": "已启用的 AI 源",
+        "toggle": "启用"
+      },
+      "option": "{{name}} • {{provider}}",
+      "providers": {
+        "gemini": "Gemini",
+        "openai": "OpenAI"
+      },
+      "add": {
+        "label": "新增 AI 源",
+        "title": "新增 AI 源",
+        "provider": "选择提供商",
+        "name": "显示名称（可选）",
+        "name-placeholder": "例如：教室 Gemini",
+        "confirm": "添加",
+        "cancel": "取消",
+        "success": "已添加 {{name}}。"
+      },
+      "make-active": "设为当前配置",
+      "remove": {
+        "label": "删除该源",
+        "success": "已删除 {{name}}。",
+        "error": "至少保留一个 AI 源。"
       }
     },
     "model": {
-      "title": "模型设置",
-      "desc": "选择模型和定义AI行为",
+      "title": "模型配置",
+      "desc": "选择或手动填写请求所使用的模型。",
       "sel": {
-        "title": "模型",
-        "empty": "选择一个模型...",
-        "unknown": "未知模型 ({{name, string}})",
-        "no-model-available": "没有可用模型",
-        "search-placeholder": "搜索模型..."
+        "search": "搜索模型...",
+        "empty": "未找到匹配的模型。",
+        "none": "未选择模型",
+        "unknown": "未知模型（{{name}}）"
+      },
+      "refresh": "刷新模型列表",
+      "manual": {
+        "title": "自定义模型",
+        "placeholder": "模型标识符",
+        "desc": "如果列表中没有想要的模型，可手动填写名称。"
+      },
+      "fetch": {
+        "error": "获取 {{provider}} 的模型列表失败，请检查 API 密钥或基地址。"
       }
     },
     "thinking": {
-      "title": "深度思考设置",
-      "default": "默认值: 8192 Tokens",
+      "title": "思考参数",
+      "desc": "针对支持的提供商调整高级思考设置。",
+      "budget": "可用思考预算",
       "tokens-unit": "Tokens"
     },
     "traits": {
-      "title": "自定义提示词",
-      "desc": "定义AI 的个性, 角色或者指令",
-      "placeholder": "例如：你是一名友善而专业的助教，擅长一步步讲解。"
+      "title": "系统提示（Traits）",
+      "desc": "定义助手的角色、语气或额外指示。",
+      "placeholder": "例如：你是一位语气亲切且专业的学习助手。"
+    },
+    "openai": {
+      "poll-interval": {
+        "title": "轮询间隔（毫秒）",
+        "desc": "当响应尚未完成时，两次状态检查之间的等待时间。"
+      },
+      "poll-timeout": {
+        "title": "轮询超时（毫秒）",
+        "desc": "在判定失败前允许轮询的最长时间。"
+      }
     },
     "advanced": {
       "title": "高级设置",
-      "desc": "请确保你知道你在做什么。",
+      "desc": "这些设置会影响上传和界面行为。",
       "custom-base-url": {
-        "title": "自定义Gemini API URL",
-        "placeholder": "https://generativelanguage.googleapis.com"
+        "title": "自定义 API 基础地址",
+        "placeholder": "https://example.com/v1",
+        "helper": "留空将使用 {{provider}} 的默认地址。"
       },
       "image-post-processing": {
-        "title": "图像后期处理",
-        "binarizing": "启用二值化 (Binarizing)"
+        "title": "图像后处理",
+        "binarizing": "开启二值化"
       },
       "ui": {
-        "title": "UI",
-        "show-donate-btn": "显示赞助按钮"
+        "title": "界面",
+        "show-donate-btn": "显示捐赠按钮"
       }
     }
   },
@@ -171,16 +237,20 @@
       "setup": "快速上手——粘贴 Gemini API Key 就能开始。"
     },
     "form": {
-      "key-placeholder": "Gemini API Key",
+      "key-placeholder": "{{provider}} API 密钥",
       "submit": "帮我省时间！",
       "advanced": {
         "title": "高级选项",
-        "base-url-label": "Gemini API 基础地址（可选）",
-        "base-url-placeholder": "https://generativelanguage.googleapis.com",
-        "base-url-helper": "留空将使用谷歌默认 API 端点。"
+        "base-url-label": "API 基础地址（可选）",
+        "base-url-placeholder": "{{provider}} 的默认接口地址",
+        "base-url-helper": "留空将使用 {{provider}} 的默认地址。"
       },
-      "api-hint": "前往 <link>Google AI Studio</link> 获取 API Key。",
-      "storage-note": "我们使用加密浏览器存储在本地保存你的密钥，绝不会上传到服务器。"
+      "api-hint": "在 <link>Google AI Studio</link> 申请 API Key。",
+      "storage-note": "我们使用加密浏览器存储在本地保存你的密钥，绝不会上传到服务器。",
+      "provider": {
+        "label": "AI 提供商"
+      },
+      "api-hint-openai": "在 <link>OpenAI 控制台</link> 申请 API Key。"
     },
     "preview": {
       "title": "作业相机",
@@ -229,7 +299,7 @@
     "toasts": {
       "no-key": {
         "title": "就差一步",
-        "description": "请先在设置中配置 API Key 才能使用 AI。"
+        "description": "请在设置中为 {{provider}} 设置 API 密钥后再尝试。"
       },
       "processing": {
         "title": "处理中",
@@ -239,6 +309,10 @@
         "title": "优化失败",
         "parse": "解析响应失败，请打开开发者工具查看更多详情。",
         "description": "出错了：{{error}}"
+      },
+      "no-source": {
+        "title": "暂无可用 AI 源",
+        "description": "请先在设置中启用至少一个 AI 源。"
       }
     }
   },
