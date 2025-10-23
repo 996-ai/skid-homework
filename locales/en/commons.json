@@ -105,6 +105,33 @@
     "streaming": {
       "title": "AI Output",
       "placeholder": "AI is thinking..."
+    },
+    "export": {
+      "button": "Export as Markdown",
+      "filename-prefix": "homework-solutions",
+      "document-title": "Homework Solutions",
+      "page-heading": "Page {{index}} · {{name}}",
+      "problem-heading": "Problem {{index}}",
+      "problem-label": "Problem",
+      "answer-label": "Answer",
+      "explanation-label": "Explanation",
+      "placeholders": {
+        "problem": "_No problem content provided._",
+        "answer": "_No answer provided._",
+        "explanation": "_No explanation provided._"
+      },
+      "empty": {
+        "title": "Nothing to export",
+        "description": "Run a scan and wait for results before exporting."
+      },
+      "success": {
+        "title": "Markdown downloaded",
+        "description": "Your solutions file is ready."
+      },
+      "error": {
+        "title": "Export failed",
+        "description": "Something went wrong while creating the markdown file."
+      }
     }
   },
   "upload-area": {
@@ -194,6 +221,40 @@
         "options": {
           "en": "English",
           "zh": "中文"
+        }
+      }
+    },
+    "shortcuts": {
+      "title": "Keyboard shortcuts",
+      "desc": "Customize the keys used for common actions. Leave blank to disable a shortcut.",
+      "recording": "Press keys…",
+      "unassigned": "Unassigned",
+      "clear": "Clear",
+      "manual": {
+        "placeholder": "Type shortcut (e.g. Ctrl+1)",
+        "invalid": "Enter a valid shortcut using modifier keys plus a key."
+      },
+      "reset": "Reset to defaults",
+      "actions": {
+        "upload": {
+          "label": "Upload files",
+          "description": "Opens the file picker for selecting images or PDFs."
+        },
+        "camera": {
+          "label": "Take photo",
+          "description": "Launches the device camera to capture homework."
+        },
+        "startScan": {
+          "label": "Start scan",
+          "description": "Sends all pending items to your AI sources."
+        },
+        "clearAll": {
+          "label": "Clear all",
+          "description": "Removes every uploaded item and solution."
+        },
+        "openSettings": {
+          "label": "Open settings",
+          "description": "Opens this settings page from anywhere in the app."
         }
       }
     },

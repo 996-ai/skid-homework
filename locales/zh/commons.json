@@ -105,6 +105,33 @@
     "streaming": {
       "title": "AI 输出",
       "placeholder": "AI 正在思考..."
+    },
+    "export": {
+      "button": "导出为 Markdown",
+      "filename-prefix": "homework-solutions",
+      "document-title": "作业解答汇总",
+      "page-heading": "第 {{index}} 页 · {{name}}",
+      "problem-heading": "题目 {{index}}",
+      "problem-label": "题干",
+      "answer-label": "答案",
+      "explanation-label": "解析",
+      "placeholders": {
+        "problem": "_暂无题干内容。_",
+        "answer": "_暂无答案。_",
+        "explanation": "_暂无解析。_"
+      },
+      "empty": {
+        "title": "暂无可导出的内容",
+        "description": "请先完成识别后再导出。"
+      },
+      "success": {
+        "title": "Markdown 已下载",
+        "description": "解答文件已保存。"
+      },
+      "error": {
+        "title": "导出失败",
+        "description": "生成 Markdown 文件时出错，请重试。"
+      }
     }
   },
   "upload-area": {
@@ -194,6 +221,40 @@
         "options": {
           "en": "English",
           "zh": "中文"
+        }
+      }
+    },
+    "shortcuts": {
+      "title": "键盘快捷键",
+      "desc": "为常用操作自定义快捷键，留空则表示禁用该快捷键。",
+      "recording": "请按键…",
+      "unassigned": "未设置",
+      "clear": "清除",
+      "manual": {
+        "placeholder": "手动输入组合（如 Ctrl+1）",
+        "invalid": "请输入包含修饰键和按键的有效组合。"
+      },
+      "reset": "恢复默认",
+      "actions": {
+        "upload": {
+          "label": "上传文件",
+          "description": "打开文件选择器，挑选图片或 PDF。"
+        },
+        "camera": {
+          "label": "拍照",
+          "description": "调用设备相机拍摄作业。"
+        },
+        "startScan": {
+          "label": "开始识别",
+          "description": "将所有待处理的文件发送给 AI 源。"
+        },
+        "clearAll": {
+          "label": "清空全部",
+          "description": "移除所有已上传的文件与结果。"
+        },
+        "openSettings": {
+          "label": "打开设置",
+          "description": "从任意页面快速进入设置。"
         }
       }
     },
