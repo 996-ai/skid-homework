@@ -4,6 +4,7 @@
     "clear-confirmation": "再点击一次",
     "processing": "处理中...",
     "scan": "开始打滑",
+    "chat": "聊天",
     "settings": "设置",
     "title": "上传照片"
   },
@@ -82,6 +83,47 @@
       "license": "基于 GPL-3.0 许可发布。",
       "slogan": "学生的时间很宝贵",
       "source": "源代码"
+    }
+  },
+  "chat-page": {
+    "title": "聊天",
+    "subtitle": "与已配置的模型一起讨论作业。",
+    "actions": {
+      "back": "返回扫描页",
+      "new-chat": "新对话",
+      "delete-chat": "删除对话"
+    },
+    "source": {
+      "section": "模型",
+      "search": "搜索模型...",
+      "empty": "没有匹配的模型",
+      "select": {
+        "placeholder": "选择模型"
+      },
+      "model": "模型名称",
+      "model-placeholder": "例如 gpt-4.1-mini 或 models/gemini-2.5-pro"
+    },
+    "history": {
+      "title": "历史记录",
+      "empty": "还没有聊天记录，先开始一个对话吧。",
+      "unknown-source": "未知来源",
+      "untitled": "新对话"
+    },
+    "conversation": {
+      "empty-title": "未选择对话",
+      "empty": "选择一个对话或新建一个对话开始聊天。"
+    },
+    "composer": {
+      "placeholder": "输入问题或粘贴题目...",
+      "send": "发送",
+      "sending": "发送中..."
+    },
+    "errors": {
+      "no-source": "请先在设置中启用至少一个已配置密钥的 AI 源。",
+      "missing-key": "{{provider}} 尚未配置 API 密钥。",
+      "no-model": "请先填写模型名称。",
+      "unsupported": "当前模型不支持对话功能。",
+      "send-failed": "发送消息失败：{{error}}"
     }
   },
   "solutions": {
@@ -255,6 +297,10 @@
         "openSettings": {
           "label": "打开设置",
           "description": "从任意页面快速进入设置。"
+        },
+        "openChat": {
+          "label": "打开聊天",
+          "description": "随时切换到聊天工作区。"
         }
       }
     },
@@ -383,6 +429,33 @@
       "next-problem": "下一题",
       "prev-image": "⟵ 图片",
       "next-image": "图片 ⟶"
+    },
+    "chat": {
+      "button": "与 AI 聊聊",
+      "default-title": "作业对话",
+      "no-problem": {
+        "title": "请先选择题目",
+        "description": "请选择一个题目后再开始对话。"
+      },
+      "no-source": {
+        "title": "暂无可用模型",
+        "description": "请先在设置中添加带密钥的 AI 源，再发起对话。"
+      },
+      "context": {
+        "intro": "学习者正在查看以下内容：",
+        "problem": "题目：\n{{problem}}",
+        "answer": "答案：\n{{answer}}",
+        "explanation": "解析：\n{{explanation}}"
+      },
+      "prefill": {
+        "intro": "我想更好地理解这道题。",
+        "outro": "可以一步步帮我讲解吗？"
+      },
+      "fallback": {
+        "problem": "题目信息缺失。",
+        "answer": "答案信息缺失。",
+        "explanation": "解析信息缺失。"
+      }
     }
   },
   "improve-dialog": {
