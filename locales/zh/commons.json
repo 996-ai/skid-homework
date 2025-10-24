@@ -86,7 +86,7 @@
     }
   },
   "chat-page": {
-    "title": "聊天",
+    "title": "打滑作业聊天",
     "subtitle": "与已配置的模型一起讨论作业。",
     "actions": {
       "back": "返回扫描页",

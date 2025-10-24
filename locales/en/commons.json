@@ -86,7 +86,7 @@
     }
   },
   "chat-page": {
-    "title": "Chat",
+    "title": "SkidHomework Chat",
     "subtitle": "Discuss problems with your configured models.",
     "actions": {
       "back": "Back to Scanner",
