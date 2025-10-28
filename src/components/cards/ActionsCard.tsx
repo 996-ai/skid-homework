@@ -91,7 +91,12 @@ export default function ActionsCard({
           layout={layout}
         />
 
-        <div className={cn("flex gap-2", layout === "mobile" && "flex-col")}>
+        <div
+          className={cn(
+            "flex gap-2 flex-wrap",
+            layout === "mobile" && "flex-col",
+          )}
+        >
           <Button
             className={cn("flex-1", layout === "mobile" && "py-6 text-base")}
             size={layout === "mobile" ? "lg" : "default"}

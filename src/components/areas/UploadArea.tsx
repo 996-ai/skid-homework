@@ -1,4 +1,4 @@
-import { Camera, Info, Upload } from "lucide-react";
+import { Camera, Upload } from "lucide-react";
 import { Button } from "../ui/button";
 import { useCallback, useRef, useState } from "react";
 import {
@@ -20,10 +20,7 @@ export type UploadAreaProps = {
   allowPdf: boolean;
 };
 
-export default function UploadArea({
-  appendFiles,
-  allowPdf,
-}: UploadAreaProps) {
+export default function UploadArea({ appendFiles, allowPdf }: UploadAreaProps) {
   const { t } = useTranslation("commons", { keyPrefix: "upload-area" });
   const isCompact = useMediaQuery("(max-width: 640px)");
   const cameraTips = t("camera-tip.tips", {
@@ -49,17 +46,13 @@ export default function UploadArea({
     cameraInputRef.current?.click();
   }, [isWorking]);
 
-  const uploadShortcut = useShortcut(
-    "upload",
-    () => handleUploadBtnClicked(),
-    [handleUploadBtnClicked],
-  );
+  const uploadShortcut = useShortcut("upload", () => handleUploadBtnClicked(), [
+    handleUploadBtnClicked,
+  ]);
 
-  const cameraShortcut = useShortcut(
-    "camera",
-    () => handleCameraBtnClicked(),
-    [handleCameraBtnClicked],
-  );
+  const cameraShortcut = useShortcut("camera", () => handleCameraBtnClicked(), [
+    handleCameraBtnClicked,
+  ]);
 
   const fileAccept = allowPdf ? "image/*,application/pdf" : "image/*";
 
@@ -136,15 +129,17 @@ export default function UploadArea({
           </span>
           {!isCompact && <ShortcutHint shortcut={cameraShortcut} />}
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setCameraTipOpen(true)}
-          aria-label={t("camera-help-aria")}
-          className={cn(isCompact && "h-12 w-12 rounded-xl border border-border/40")}
-        >
-          <Info className="h-4 w-4" />
-        </Button>
+        {/* <Button */}
+        {/*   variant="ghost" */}
+        {/*   size="icon" */}
+        {/*   onClick={() => setCameraTipOpen(true)} */}
+        {/*   aria-label={t("camera-help-aria")} */}
+        {/*   className={cn( */}
+        {/*     isCompact && "h-12 w-12 rounded-xl border border-border/40", */}
+        {/*   )} */}
+        {/* > */}
+        {/*   <Info className="h-4 w-4" /> */}
+        {/* </Button> */}
       </div>
       {/* Camera help dialog */}
       <Dialog open={cameraTipOpen} onOpenChange={setCameraTipOpen}>
