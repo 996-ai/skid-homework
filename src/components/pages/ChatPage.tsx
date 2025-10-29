@@ -9,7 +9,6 @@ import {
   ChevronsUpDown,
   Check,
   Menu,
-  X,
   GitFork,
   PanelLeftClose,
   PanelLeftOpen,
@@ -77,6 +76,7 @@ export default function ChatPage() {
     [t],
   );
 
+  // --- State and Store Hooks ---
   const sources = useAiStore((state) => state.sources);
   const activeSourceId = useAiStore((state) => state.activeSourceId);
   const setActiveSource = useAiStore((state) => state.setActiveSource);
@@ -93,8 +93,9 @@ export default function ChatPage() {
   const updateMessage = useChatStore((state) => state.updateMessage);
   const updateThread = useChatStore((state) => state.updateThread);
   const deleteChat = useChatStore((state) => state.deleteChat);
-  const clearAllChats = useChatStore((state) => state.clearAllChats);
+  // const clearAllChats = useChatStore((state) => state.clearAllChats);
 
+  // --- Component State ---
   const [messageInput, setMessageInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [seedData, setSeedData] = useState<SeedChatState | null>(null);
@@ -109,7 +110,9 @@ export default function ChatPage() {
     [storeChatMessages],
   );
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  // --- UI State for Responsive Design ---
+  const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile sidebar dialog
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false); // For collapsible desktop sidebar
   const [sidebarTab, setSidebarTab] = useState("history");
   const [selectedChatIds, setSelectedChatIds] = useState<Set<string>>(
     () => new Set(),
@@ -117,8 +120,8 @@ export default function ChatPage() {
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
   const [forkingChatId, setForkingChatId] = useState<string | null>(null);
   const [deletingChatId, setDeletingChatId] = useState<string | null>(null);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
+  // --- Effects for Data Loading ---
   useEffect(() => {
     if (!isHydrated) {
       loadThreads().catch((error) => {
@@ -136,6 +139,7 @@ export default function ChatPage() {
     });
   }, [activeChatId, loadMessages]);
 
+  // --- Memos for Derived State ---
   const availableSources = useMemo(
     () => sources.filter((source) => source.enabled && Boolean(source.apiKey)),
     [sources],
@@ -152,8 +156,10 @@ export default function ChatPage() {
     [threads, activeChatId],
   );
 
+  // --- Source and Model Selection State ---
   const [currentSourceId, setCurrentSourceId] = useState<string | null>(null);
   const [sourcePopoverOpen, setSourcePopoverOpen] = useState(false);
+  const [modelInput, setModelInput] = useState("");
 
   useEffect(() => {
     if (activeThread) {
@@ -178,23 +184,16 @@ export default function ChatPage() {
     ? (availableSources.find((src) => src.id === resolvedSourceId) ?? null)
     : null;
 
-  const [modelInput, setModelInput] = useState("");
-
+  // --- Effects for Handling Location State and Model Input ---
   useEffect(() => {
     const state = location.state as { seedChat?: SeedChatState } | undefined;
     if (!state?.seedChat) return;
 
     const seed = state.seedChat;
     setSeedData(seed);
-    if (seed.prefillMessage) {
-      setMessageInput(seed.prefillMessage);
-    }
-    if (seed.sourceId) {
-      setCurrentSourceId(seed.sourceId);
-    }
-    if (seed.model) {
-      setModelInput(seed.model);
-    }
+    if (seed.prefillMessage) setMessageInput(seed.prefillMessage);
+    if (seed.sourceId) setCurrentSourceId(seed.sourceId);
+    if (seed.model) setModelInput(seed.model);
 
     navigate(location.pathname, { replace: true });
   }, [location, navigate]);
@@ -211,14 +210,15 @@ export default function ChatPage() {
     }
   }, [activeThread, resolvedSource, seedData]);
 
+  // --- Auto-scrolling Effect ---
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => {
     const container = messageContainerRef.current;
     if (!container) return;
     container.scrollTop = container.scrollHeight;
   }, [chatMessages]);
 
+  // --- Handlers ---
   const handleSelectSource = async (sourceId: string) => {
     setSourcePopoverOpen(false);
     setCurrentSourceId(sourceId);
@@ -264,10 +264,7 @@ export default function ChatPage() {
 
   const handleSelectAll = useCallback(() => {
     setSelectedChatIds((prev) => {
-      if (threads.length === 0) {
-        return new Set();
-      }
-      if (prev.size === threads.length) {
+      if (threads.length === 0 || prev.size === threads.length) {
         return new Set();
       }
       return new Set(threads.map((thread) => thread.id));
@@ -290,9 +287,7 @@ export default function ChatPage() {
     setIsBulkDeleting(true);
     try {
       const ids = Array.from(selectedChatIds);
-      for (const id of ids) {
-        await deleteChat(id);
-      }
+      await Promise.all(ids.map((id) => deleteChat(id)));
       toast.success(
         translate("history.bulk-delete-success", {
           defaultValue: "Selected chats deleted successfully.",
@@ -311,35 +306,35 @@ export default function ChatPage() {
     }
   };
 
-  const handleClearAllChats = async () => {
-    if (!threads.length) return;
-    const confirmDelete = window.confirm(
-      translate("history.clear-all-confirm", {
-        defaultValue: "Clear all chat history? This cannot be undone.",
-      }),
-    );
-    if (!confirmDelete) return;
-
-    setIsBulkDeleting(true);
-    try {
-      await clearAllChats();
-      toast.success(
-        translate("history.clear-all-success", {
-          defaultValue: "All chats have been cleared.",
-        }),
-      );
-    } catch (error) {
-      console.error("Failed to clear all chats", error);
-      toast.error(
-        translate("history.clear-all-error", {
-          defaultValue: "Failed to clear all chats. Try again.",
-        }),
-      );
-    } finally {
-      setIsBulkDeleting(false);
-      clearSelection();
-    }
-  };
+  // const handleClearAllChats = async () => {
+  //   if (!threads.length) return;
+  //   const confirmDelete = window.confirm(
+  //     translate("history.clear-all-confirm", {
+  //       defaultValue: "Clear all chat history? This cannot be undone.",
+  //     }),
+  //   );
+  //   if (!confirmDelete) return;
+  //
+  //   setIsBulkDeleting(true);
+  //   try {
+  //     await clearAllChats();
+  //     toast.success(
+  //       translate("history.clear-all-success", {
+  //         defaultValue: "All chats have been cleared.",
+  //       }),
+  //     );
+  //   } catch (error) {
+  //     console.error("Failed to clear all chats", error);
+  //     toast.error(
+  //       translate("history.clear-all-error", {
+  //         defaultValue: "Failed to clear all chats. Try again.",
+  //       }),
+  //     );
+  //   } finally {
+  //     setIsBulkDeleting(false);
+  //     clearSelection();
+  //   }
+  // };
 
   const handleForkChat = async (chatId: string) => {
     const thread = threads.find((item) => item.id === chatId);
@@ -429,8 +424,7 @@ export default function ChatPage() {
 
   const handleModelBlur = async () => {
     const trimmed = modelInput.trim();
-    if (!activeThread) return;
-    if (trimmed && trimmed !== activeThread.model) {
+    if (activeThread && trimmed && trimmed !== activeThread.model) {
       await updateThread(activeThread.id, { model: trimmed });
     }
     setModelInput(trimmed);
@@ -591,31 +585,30 @@ export default function ChatPage() {
 
   const handleNewChat = useCallback(() => {
     setActiveChat(undefined);
-    if (resolvedSource) {
-      setModelInput(resolvedSource.model);
-    } else {
-      setModelInput("");
-    }
+    setModelInput(resolvedSource?.model || "");
     setMessageInput("");
     setSeedData(null);
     clearSelection();
-  }, [
-    clearSelection,
-    resolvedSource,
-    setActiveChat,
-    setMessageInput,
-    setModelInput,
-    setSeedData,
+  }, [clearSelection, resolvedSource, setActiveChat]);
+
+  // --- Hotkeys ---
+  useHotkeys("esc", () => navigate("/"), { enableOnFormTags: true }, [
+    navigate,
+  ]);
+  useHotkeys(["ctrl+shift+o"], handleNewChat, { enableOnFormTags: true }, [
+    handleNewChat,
   ]);
 
-  const currentSourceLabel = resolvedSource
-    ? resolvedSource.name
-    : t("source.select.placeholder");
-  const activeThreadModel = activeThread?.model?.trim();
-  const currentModelInput = modelInput.trim();
+  // --- Derived UI Labels ---
+  const currentSourceLabel =
+    resolvedSource?.name || t("source.select.placeholder");
   const activeModelName =
-    activeThreadModel || currentModelInput || resolvedSource?.model || "";
+    activeThread?.model?.trim() ||
+    modelInput.trim() ||
+    resolvedSource?.model ||
+    "";
 
+  // --- Reusable Sidebar Content ---
   const sidebarContent = (
     <div className="flex h-full flex-col gap-4">
       <Tabs
@@ -627,10 +620,13 @@ export default function ChatPage() {
           <TabsTrigger value="history">{t("history.title")}</TabsTrigger>
           <TabsTrigger value="sources">{t("source.section")}</TabsTrigger>
         </TabsList>
+
+        {/* History Tab */}
         <TabsContent
           value="history"
           className="flex flex-1 flex-col gap-3 overflow-hidden"
         >
+          {/* Bulk Actions */}
           <div className="flex flex-wrap gap-2">
             <Button
               variant="outline"
@@ -638,26 +634,8 @@ export default function ChatPage() {
               onClick={handleSelectAll}
               disabled={!threads.length}
             >
-              {isAllSelected
-                ? translate("history.selection.clear", {
-                    defaultValue: "Clear selection",
-                  })
-                : translate("history.selection.all", {
-                    defaultValue: "Select all",
-                  })}
+              {isAllSelected ? "Clear selection" : "Select all"}
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearSelection}
-              disabled={!hasSelection}
-            >
-              {translate("history.selection.reset", {
-                defaultValue: "Reset selection",
-              })}
-            </Button>
-          </div>
-          <div className="flex flex-wrap gap-2">
             <Button
               variant="destructive"
               size="sm"
@@ -665,26 +643,14 @@ export default function ChatPage() {
               disabled={!hasSelection || isBulkDeleting}
             >
               <Trash2 className="mr-1.5 h-4 w-4" />
-              {isBulkDeleting
-                ? translate("history.deleting", { defaultValue: "Deleting..." })
-                : translate("history.delete-selected", {
-                    defaultValue: "Delete selected",
-                  })}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleClearAllChats}
-              disabled={!threads.length || isBulkDeleting}
-            >
-              <Trash2 className="mr-1.5 h-4 w-4" />
-              {translate("history.clear-all", { defaultValue: "Clear all" })}
+              {isBulkDeleting ? "Deleting..." : "Delete selected"}
             </Button>
           </div>
-          <div className="flex-1 overflow-hidden rounded-lg border border-border/40 bg-background/40">
-            <div className="h-full space-y-2 overflow-y-auto px-2 py-3">
+          {/* Chat List */}
+          <div className="flex-1 overflow-hidden rounded-lg border bg-background/40">
+            <div className="h-full space-y-2 overflow-y-auto p-2">
               {threads.length === 0 ? (
-                <div className="rounded-md border border-dashed border-white/10 px-3 py-6 text-center text-xs text-muted-foreground">
+                <div className="p-6 text-center text-xs text-muted-foreground">
                   {t("history.empty")}
                 </div>
               ) : (
@@ -699,62 +665,50 @@ export default function ChatPage() {
                         "flex items-center gap-2 rounded-md border p-2 transition-colors",
                         isActive
                           ? "border-primary bg-primary/10"
-                          : "border-transparent bg-muted/30 hover:border-border/60 hover:bg-muted/50",
+                          : "border-transparent bg-muted/30 hover:bg-muted/50",
                       )}
                     >
                       <Checkbox
                         checked={isSelected}
                         onCheckedChange={() => toggleChatSelection(thread.id)}
-                        onClick={(event) => event.stopPropagation()}
-                        aria-label={translate("history.selection.label", {
-                          defaultValue: "Select chat",
-                        })}
+                        onClick={(e) => e.stopPropagation()}
+                        aria-label="Select chat"
                       />
                       <button
                         type="button"
                         onClick={() => {
                           setActiveChat(thread.id);
-                          setSidebarOpen(false);
+                          setSidebarOpen(false); // Close mobile sidebar on selection
                         }}
-                        className="flex flex-1 flex-col text-left overflow-hidden"
+                        className="flex flex-1 flex-col overflow-hidden text-left"
                       >
-                        <span className="truncate text-sm font-medium overflow-ellipsis">
+                        <span className="truncate text-sm font-medium">
                           {thread.title}
                         </span>
                         <span className="truncate text-xs text-muted-foreground">
-                          {threadSource
-                            ? threadSource.name
-                            : t("history.unknown-source")}
-                          {" · "}
-                          {thread.model}
+                          {threadSource?.name || "Unknown"} · {thread.model}
                         </span>
                       </button>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center">
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={(event) => {
-                            event.stopPropagation();
+                          onClick={(e) => {
+                            e.stopPropagation();
                             handleForkChat(thread.id);
                           }}
                           disabled={forkingChatId === thread.id}
-                          aria-label={translate("history.actions.fork", {
-                            defaultValue: "Fork chat",
-                          })}
                         >
                           <GitFork className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={(event) => {
-                            event.stopPropagation();
+                          onClick={(e) => {
+                            e.stopPropagation();
                             handleDeleteSingleChat(thread.id);
                           }}
                           disabled={deletingChatId === thread.id}
-                          aria-label={translate("history.actions.delete", {
-                            defaultValue: "Delete chat",
-                          })}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -766,11 +720,13 @@ export default function ChatPage() {
             </div>
           </div>
         </TabsContent>
+
+        {/* Sources Tab */}
         <TabsContent
           value="sources"
           className="flex flex-1 flex-col gap-4 overflow-y-auto"
         >
-          <div className="space-y-3 rounded-lg border border-white/10 bg-background/40 p-4">
+          <div className="space-y-3 rounded-lg border bg-background/40 p-4">
             <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {t("source.section")}
             </label>
@@ -830,7 +786,7 @@ export default function ChatPage() {
               />
             </div>
           </div>
-          <div className="rounded-lg border border-white/10 bg-background/40 p-4 text-xs text-muted-foreground">
+          <div className="rounded-lg border bg-background/40 p-4 text-xs text-muted-foreground">
             {translate("source.model-helper", {
               defaultValue:
                 "Pick a provider and optionally override the default model.",
@@ -841,56 +797,31 @@ export default function ChatPage() {
     </div>
   );
 
-  useHotkeys(
-    "esc",
-    (event) => {
-      event.preventDefault();
-      navigate("/");
-    },
-    {
-      enableOnFormTags: true,
-    },
-    [navigate],
-  );
-
-  useHotkeys(
-    ["ctrl+shift+o"],
-    (event) => {
-      event.preventDefault();
-      handleNewChat();
-    },
-    {
-      enableOnFormTags: true,
-    },
-    [handleNewChat],
-  );
-
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <header className="border-b border-border/60 bg-background/80 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-[80%] items-center justify-between gap-3 px-3 py-4 sm:px-6 lg:px-8">
+      {/* ===== HEADER ===== */}
+      {/* BEST PRACTICE: Sticky header with backdrop blur for a modern feel. */}
+      <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
+        {/* MODIFICATION: Using max-w-7xl and mx-auto for a centered, responsive container. */}
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex flex-1 items-center gap-3">
+            {/* BEST PRACTICE: This button is only visible on small screens (hidden on 'lg' and up) to trigger the mobile sidebar. */}
             <Button
               variant="outline"
               size="icon"
               className="lg:hidden"
               onClick={() => setSidebarOpen(true)}
-              aria-label={translate("sidebar.open", {
-                defaultValue: "Open chat menu",
-              })}
+              aria-label="Open chat menu"
             >
               <Menu className="h-5 w-5" />
             </Button>
+            {/* BEST PRACTICE: This button toggles the desktop sidebar's collapsed state and is hidden on small screens. */}
             <Button
               variant="ghost"
               size="icon"
               className="hidden lg:flex"
               onClick={() => setSidebarCollapsed((prev) => !prev)}
-              aria-label={
-                sidebarCollapsed
-                  ? translate("sidebar.show", { defaultValue: "Show sidebar" })
-                  : translate("sidebar.hide", { defaultValue: "Hide sidebar" })
-              }
+              aria-label={sidebarCollapsed ? "Show sidebar" : "Hide sidebar"}
             >
               {sidebarCollapsed ? (
                 <PanelLeftOpen className="h-5 w-5" />
@@ -898,17 +829,19 @@ export default function ChatPage() {
                 <PanelLeftClose className="h-5 w-5" />
               )}
             </Button>
-            <div className="flex min-w-0 flex-col gap-1">
-              <h1 className="truncate text-2xl font-semibold tracking-tight sm:text-3xl">
+            <div className="flex min-w-0 flex-col">
+              {/* BEST PRACTICE: Responsive typography scales up on larger screens. */}
+              <h1 className="truncate text-xl font-semibold sm:text-2xl">
                 {t("title")}
               </h1>
-              <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
+              <p className="hidden text-sm text-muted-foreground sm:block">
+                {t("subtitle")}
+              </p>
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <Button variant="outline" size="sm" onClick={() => navigate("/")}>
-              {t("actions.back")}
-              <Kbd>ESC</Kbd>
+              {t("actions.back")} <Kbd>ESC</Kbd>
             </Button>
             <Button
               size="sm"
@@ -917,43 +850,50 @@ export default function ChatPage() {
               className="gap-2"
             >
               <Plus className="h-4 w-4" />
-              <span>{t("actions.new-chat")}</span>
+              <span className="hidden sm:inline">{t("actions.new-chat")}</span>
+              <span className="sm:hidden">New</span>
             </Button>
           </div>
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-[80%] flex-1 flex-col gap-6 px-3 py-4 sm:px-6 sm:py-6 lg:flex-row lg:gap-8 lg:px-8">
+      {/* ===== MAIN CONTENT ===== */}
+      {/* MODIFICATION: Using max-w-7xl for the main content area to align with the header. */}
+      {/* BEST PRACTICE: Layout shifts from column to row on large screens ('lg:flex-row'). */}
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:flex-row lg:gap-8 lg:p-8">
+        {/* ===== DESKTOP SIDEBAR ===== */}
+        {/* BEST PRACTICE: The <aside> is completely hidden on mobile and appears as a flex column on 'lg' screens. */}
         {!sidebarCollapsed && (
-          <aside className="hidden w-full max-w-md lg:flex lg:flex-col">
-            <div className="sticky top-[96px] flex h-[calc(100vh-160px)] flex-1 flex-col rounded-2xl border border-border/60 bg-card/80 p-4 shadow-sm">
+          <aside className="hidden w-full max-w-sm lg:flex lg:flex-col">
+            <div className="sticky top-24 flex h-[calc(100vh-8rem)] flex-1 flex-col rounded-xl border bg-card/80 p-4">
               {sidebarContent}
             </div>
           </aside>
         )}
 
+        {/* ===== CHAT PANEL ===== */}
         <main className="flex flex-1 flex-col">
-          <section className="flex h-full min-h-[480px] flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/80 shadow-lg">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 px-4 py-3 sm:px-6">
+          <section className="flex h-full min-h-[60vh] flex-1 flex-col overflow-hidden rounded-xl border bg-card/80 shadow-sm">
+            {/* Chat Header */}
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b p-4 sm:px-6">
               <div className="min-w-0">
-                <h2 className="truncate text-lg font-semibold sm:text-xl w-xl">
+                <h2 className="truncate text-lg font-semibold sm:text-xl">
                   {activeThread
                     ? activeThread.title
                     : t("conversation.empty-title")}
                 </h2>
-                <p className="text-xs text-muted-foreground sm:text-sm">
+                <p className="truncate text-xs text-muted-foreground sm:text-sm">
                   {resolvedSource
-                    ? `${resolvedSource.name}${
-                        activeModelName ? ` · ${activeModelName}` : ""
-                      }`
+                    ? `${resolvedSource.name} · ${activeModelName}`
                     : t("source.select.placeholder")}
                 </p>
               </div>
             </div>
 
+            {/* Message List */}
             <div
               ref={messageContainerRef}
-              className="flex-1 space-y-4 overflow-y-auto px-4 pb-5 pt-6 sm:px-6"
+              className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6"
             >
               {chatMessages.length === 0 ? (
                 <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
@@ -968,9 +908,10 @@ export default function ChatPage() {
                       message.role === "user" ? "justify-end" : "justify-start",
                     )}
                   >
+                    {/* BEST PRACTICE: Message bubbles use a smaller max-width on mobile and a larger one on sm+ screens. */}
                     <div
                       className={cn(
-                        "max-w-[40%] rounded-2xl px-4 py-3 text-sm shadow-sm sm:max-w-[72%]",
+                        "max-w-[80%] rounded-2xl px-4 py-3 text-sm shadow-sm sm:max-w-[70%]",
                         message.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted",
@@ -986,20 +927,22 @@ export default function ChatPage() {
               )}
             </div>
 
-            <div className="border-t border-border/60 bg-background/40 px-4 py-4 sm:px-6">
+            {/* Message Composer */}
+            <div className="border-t bg-background/40 p-4 sm:px-6">
+              {/* BEST PRACTICE: Stacks vertically on mobile, then becomes a row on 'sm' screens for an optimal layout. */}
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
                 <Textarea
                   value={messageInput}
-                  onChange={(event) => setMessageInput(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" && !event.shiftKey) {
-                      event.preventDefault();
+                  onChange={(e) => setMessageInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
                       handleSend();
                     }
                   }}
                   placeholder={t("composer.placeholder")}
                   disabled={isSending || !resolvedAvailableSource}
-                  className="min-h-[96px] w-full flex-1 resize-none rounded-xl border border-border/60 bg-background/70 p-3 text-sm shadow-sm sm:min-h-[120px]"
+                  className="min-h-[80px] w-full flex-1 resize-none rounded-xl border bg-background/70 p-3 text-sm"
                 />
                 <Button
                   onClick={handleSend}
@@ -1008,7 +951,8 @@ export default function ChatPage() {
                     !messageInput.trim() ||
                     !resolvedAvailableSource
                   }
-                  className="h-12 w-full rounded-xl sm:h-[52px] sm:w-auto sm:px-6"
+                  // BEST PRACTICE: Button is full-width on mobile and auto-width on larger screens.
+                  className="h-12 w-full rounded-xl sm:w-auto sm:px-6"
                 >
                   {isSending ? t("composer.sending") : t("composer.send")}
                 </Button>
@@ -1018,22 +962,12 @@ export default function ChatPage() {
         </main>
       </div>
 
+      {/* ===== MOBILE SIDEBAR DIALOG ===== */}
+      {/* BEST PRACTICE: Using a Dialog component for the mobile menu is accessible and user-friendly. */}
       <Dialog open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <DialogContent className="flex max-h-[90vh] w-full max-w-sm flex-col overflow-hidden rounded-2xl p-4 sm:max-w-md">
-          <div className="flex items-center justify-between border-b pb-2">
-            <DialogTitle className="text-base font-semibold leading-none tracking-tight">
-              {translate("sidebar.mobile-title", { defaultValue: "Chat menu" })}
-            </DialogTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setSidebarOpen(false)}
-              aria-label={translate("sidebar.close", {
-                defaultValue: "Close chat menu",
-              })}
-            >
-              <X className="h-5 w-5" />
-            </Button>
+        <DialogContent className="flex max-h-[90dvh] w-full max-w-sm flex-col overflow-hidden p-4">
+          <div className="flex items-center justify-between border-b pb-3">
+            <DialogTitle>Chat Menu</DialogTitle>
           </div>
           <div className="flex-1 overflow-y-auto pt-4">{sidebarContent}</div>
         </DialogContent>
