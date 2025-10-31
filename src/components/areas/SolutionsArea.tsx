@@ -127,8 +127,10 @@ export default function SolutionsArea() {
         const hasContent = (value: string | undefined | null) =>
           Boolean(value && value.replace(/\s+/g, "").length);
 
-        const ensureContent = (value: string | undefined | null, fallback: string) =>
-          hasContent(value) ? value! : fallback;
+        const ensureContent = (
+          value: string | undefined | null,
+          fallback: string,
+        ) => (hasContent(value) ? value! : fallback);
 
         lines.push(`**${translate("export.problem-label")}**`);
         lines.push("");
@@ -231,12 +233,7 @@ export default function SolutionsArea() {
     const next = (currentImageIdx + 1) % orderedSolutions.length;
     setSelectedImage(orderedSolutions[next].item.url);
     setSelectedProblem(0); // Reset problem index when changing images.
-  }, [
-    currentImageIdx,
-    orderedSolutions,
-    setSelectedImage,
-    setSelectedProblem,
-  ]);
+  }, [currentImageIdx, orderedSolutions, setSelectedImage, setSelectedProblem]);
 
   const goPrevImage = useCallback(() => {
     if (!orderedSolutions.length) return;
@@ -244,12 +241,7 @@ export default function SolutionsArea() {
       (currentImageIdx - 1 + orderedSolutions.length) % orderedSolutions.length;
     setSelectedImage(orderedSolutions[prev].item.url);
     setSelectedProblem(0); // Reset problem index.
-  }, [
-    currentImageIdx,
-    orderedSolutions,
-    setSelectedImage,
-    setSelectedProblem,
-  ]);
+  }, [currentImageIdx, orderedSolutions, setSelectedImage, setSelectedProblem]);
 
   // Effect to clamp the selectedProblem index to a valid range when data changes.
   useEffect(() => {
@@ -279,9 +271,11 @@ export default function SolutionsArea() {
     if (e.target instanceof HTMLTextAreaElement) return;
     // handle navigation
     // Tab/Shift+Tab for image navigation.
-    if (e.key === "Tab") {
+
+    // L-Arrow/R-Arrow for an ergonomics keybinding for Left-Handedness
+    if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
       e.preventDefault();
-      if (e.shiftKey) goPrevImage();
+      if (e.shiftKey || e.key === "ArrowLeft") goPrevImage();
       else goNextImage();
       // focus the viewer
       setTimeout(() => viewerRef.current?.focus(), 0);
@@ -318,7 +312,7 @@ export default function SolutionsArea() {
         return t("status.pending");
 
       case "failed":
-      return t("status.failed");
+        return t("status.failed");
     }
   };
 
@@ -365,9 +359,7 @@ export default function SolutionsArea() {
     <>
       <Card className="rounded-2xl shadow">
         <CardHeader className="px-6 pb-0">
-          <CardTitle className="text-lg font-semibold">
-            {t("title")}
-          </CardTitle>
+          <CardTitle className="text-lg font-semibold">{t("title")}</CardTitle>
           <CardAction>
             <Button
               variant="outline"
@@ -455,7 +447,9 @@ export default function SolutionsArea() {
                               <div className="text-xs text-slate-400">
                                 {t("photo-label", {
                                   index: idx + 1,
-                                  source: tCommon(`sources.${entry.item.source}`),
+                                  source: tCommon(
+                                    `sources.${entry.item.source}`,
+                                  ),
                                 })}
                               </div>
                               <CollapsibleTrigger asChild>

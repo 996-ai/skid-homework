@@ -64,14 +64,9 @@ export default function PreviewCard({
           "border border-white/20 bg-background/70 shadow-lg backdrop-blur-lg",
       )}
     >
-      <CardHeader
-        className={cn(isMobileLayout && "px-5 pb-2 pt-5")}
-      >
+      <CardHeader className={cn(isMobileLayout && "px-5 pb-2 pt-5")}>
         <CardTitle
-          className={cn(
-            "text-base",
-            isMobileLayout && "text-lg font-semibold",
-          )}
+          className={cn("text-base", isMobileLayout && "text-lg font-semibold")}
         >
           {t("title")}
         </CardTitle>
@@ -105,7 +100,9 @@ export default function PreviewCard({
             </p>
             <p className="text-sm">
               {/* You can drag your files to this panel. */}
-              {isMobileLayout ? t("drag-tip-mobile", { defaultValue: t("drag-tip") }) : t("drag-tip")}
+              {isMobileLayout
+                ? t("drag-tip-mobile", { defaultValue: t("drag-tip") })
+                : t("drag-tip")}
             </p>
           </div>
         ) : (
