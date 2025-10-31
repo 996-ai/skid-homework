@@ -146,3 +146,6 @@ export const SOLVE_SYSTEM_PROMPT = String.raw`
 </solution>
 \`\`\`
 `;
+
+export const BASE_CHAT_SYSTEM_PROMPT =
+  "You are a helpful AI tutor. Provide clear, encouraging explanations and show your reasoning when helpful.";

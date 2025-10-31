@@ -34,9 +34,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { Checkbox } from "../ui/checkbox";
 import { Kbd } from "../ui/kbd";
-
-const BASE_CHAT_SYSTEM_PROMPT =
-  "You are a helpful AI tutor. Provide clear, encouraging explanations and show your reasoning when helpful.";
+import { BASE_CHAT_SYSTEM_PROMPT } from "@/ai/prompts";
 
 function trimTitle(text: string, fallback: string) {
   const trimmed = text.replace(/\s+/g, " ").trim();
