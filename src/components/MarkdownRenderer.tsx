@@ -12,7 +12,7 @@ type MemoizedMarkdownProps = {
 
 const MarkdownRenderer = ({
   source,
-  wrapText = false,
+  wrapText = true,
 }: MemoizedMarkdownProps) => {
   return (
     <div className={wrapText ? "whitespace-pre-wrap break-words" : undefined}>
