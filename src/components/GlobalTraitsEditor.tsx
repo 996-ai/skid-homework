@@ -3,8 +3,10 @@ import { useRef, useState, type KeyboardEvent } from "react";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { MemoizedMarkdown } from "./MarkdownRenderer";
+import { useTranslation } from "react-i18next";
 
 export default function GlobalTraitsEditor() {
+  const { t } = useTranslation("commons");
   const { traits, setTraits } = useSettingsStore((s) => s);
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -48,7 +50,7 @@ export default function GlobalTraitsEditor() {
 
   return (
     <div className="flex flex-col w-full gap-2 h-40">
-      <Label>Global Traits:</Label>
+      <Label>{t("actions.global-traits.title")}</Label>
       {editing ? (
         <Textarea
           ref={inputRef}
@@ -67,7 +69,7 @@ export default function GlobalTraitsEditor() {
             <MemoizedMarkdown source={traits} />
           ) : (
             <div className="border rounded w-full h-full text-center">
-              Click here to edit global traits
+              {t("actions.global-traits.hint")}
             </div>
           )}
         </div>

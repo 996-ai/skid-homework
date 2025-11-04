@@ -6,7 +6,11 @@
     "scan": "Let's Skid",
     "chat": "Chat",
     "settings": "Settings",
-    "title": "Add Images"
+    "title": "Add Images",
+    "global-traits": {
+      "title": "Global Traits:",
+      "hint": "Click here to edit global traits"
+    }
   },
   "preview": {
     "drag-tip": "You can drag your files to this panel.",
