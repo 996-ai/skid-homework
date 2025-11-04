@@ -81,6 +81,7 @@ export const useSettingsStore = create<SettingsState>()(
         theme: state.theme,
         language: state.language,
         keybindings: state.keybindings,
+        traits: state.traits,
       }),
       version: 3,
       migrate: (persistedState, version) => {
