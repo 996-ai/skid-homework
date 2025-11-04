@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { useShortcut } from "@/hooks/use-shortcut";
 import { ShortcutHint } from "../ShortcutHint";
+import GlobalTraitsEditor from "../GlobalTraitsEditor";
 
 export type ActionsAreaProps = {
   startScan: () => Promise<void>;
@@ -69,6 +70,8 @@ export default function ActionsArea({
     <div
       className={cn("flex gap-2 flex-wrap", isMobileLayout && "flex-col gap-3")}
     >
+      <GlobalTraitsEditor />
+
       <Button
         ref={clearAllBtnRef}
         variant="destructive"
@@ -102,7 +105,8 @@ export default function ActionsArea({
           </>
         ) : (
           <>
-            {t("scan")} {!isMobileLayout && <ShortcutHint shortcut={scanShortcut} />}
+            {t("scan")}{" "}
+            {!isMobileLayout && <ShortcutHint shortcut={scanShortcut} />}
           </>
         )}
       </Button>
