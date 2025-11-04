@@ -43,6 +43,9 @@ export interface SettingsState {
   keybindings: ShortcutMap;
   setKeybinding: (action: ShortcutAction, binding: string) => void;
   resetKeybindings: () => void;
+
+  traits: string;
+  setTraits: (traits: string) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -53,6 +56,7 @@ export const useSettingsStore = create<SettingsState>()(
       theme: "system",
       language: DEFAULT_LANGUAGE,
       keybindings: { ...DEFAULT_SHORTCUTS },
+      traits: "",
 
       setImageBinarizing: (state) => set({ imageBinarizing: state }),
       setShowDonateBtn: (state) => set({ showDonateBtn: state }),
@@ -66,6 +70,7 @@ export const useSettingsStore = create<SettingsState>()(
           },
         })),
       resetKeybindings: () => set({ keybindings: { ...DEFAULT_SHORTCUTS } }),
+      setTraits: (traits) => set({ traits }),
     }),
     {
       name: "skidhw-storage",

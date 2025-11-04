@@ -43,7 +43,7 @@ export default function ScanPage() {
     clearStreamedOutput,
   } = useProblemsStore((s) => s);
 
-  const { imageBinarizing } = useSettingsStore((s) => s);
+  const { imageBinarizing, traits } = useSettingsStore((s) => s);
   const imageBinarizingRef = useRef(imageBinarizing);
 
   // Zustand store for AI provider configuration.
@@ -302,15 +302,25 @@ export default function ScanPage() {
               );
             }
 
-            const traitsPrompt = source.traits
+            const promptPrompt = source.traits
+              ? `\nUser defined prompts:
+<prompt>
+${source.traits}
+</prompt>
+`
+              : "";
+
+            const traitsPrompt = traits
               ? `\nUser defined traits:
 <traits>
-${source.traits}
+${traits}
 </traits>
 `
               : "";
 
-            ai.setSystemPrompt(SOLVE_SYSTEM_PROMPT + traitsPrompt);
+            ai.setSystemPrompt(
+              SOLVE_SYSTEM_PROMPT + promptPrompt + traitsPrompt,
+            );
 
             clearStreamedOutput(item.url);
 
