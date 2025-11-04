@@ -6,7 +6,11 @@
     "scan": "开始打滑",
     "chat": "聊天",
     "settings": "设置",
-    "title": "上传照片"
+    "title": "上传照片",
+    "global-traits": {
+      "title": "个性化:",
+      "hint": "点击这里来输入自定义Prompt"
+    }
   },
   "preview": {
     "drag-tip": "你可以把文件拖动到这个窗口中",
