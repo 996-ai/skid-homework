@@ -15,7 +15,9 @@ const MarkdownRenderer = ({
   wrapText = true,
 }: MemoizedMarkdownProps) => {
   return (
-    <div className={wrapText ? "whitespace-pre-wrap break-words" : undefined}>
+    <div
+      className={wrapText ? "whitespace-pre-wrap overflow-x-auto" : undefined}
+    >
       <Markdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[[rehypeKatex, { output: "html" }]]}
