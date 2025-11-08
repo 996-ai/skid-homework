@@ -8,7 +8,7 @@
     "settings": "设置",
     "title": "上传照片",
     "global-traits": {
-      "title": "全局提示词",
+      "title": "全局提示词编辑器",
       "hint": "点击这里来输入自定义Prompt"
     }
   },

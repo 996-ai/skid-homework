@@ -1,17 +1,6 @@
 import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
-import {
-  DialogHeader,
-  DialogFooter,
-  DialogClose,
-  Dialog,
-  DialogTrigger,
-  DialogTitle,
-  DialogDescription,
-  DialogContent,
-} from "../ui/dialog";
 import { Kbd } from "../ui/kbd";
-import { Textarea } from "../ui/textarea";
 import type { OrderedSolution } from "../areas/SolutionsArea";
 import { useProblemsStore, type ProblemSolution } from "@/store/problems-store";
 import { parseImproveResponse, type ImproveResponse } from "@/ai/response";
@@ -22,6 +11,7 @@ import { IMPROVE_SYSTEM_PROMPT } from "@/ai/prompts";
 import { uint8ToBase64 } from "@/utils/encoding";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { TextInputDialog } from "./TextInputDialog"; // Import the new component
 
 export type ImproveSolutionDialogProps = {
   entry: OrderedSolution;
@@ -53,10 +43,7 @@ export const ImproveSolutionDialog = forwardRef<
     if (!active) {
       return available;
     }
-    return [
-      active,
-      ...available.filter((source) => source.id !== active.id),
-    ];
+    return [active, ...available.filter((source) => source.id !== active.id)];
   }, [sources, activeSourceId]);
 
   useImperativeHandle(ref, () => ({
@@ -66,10 +53,9 @@ export const ImproveSolutionDialog = forwardRef<
   }));
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [improveSolutionPrompt, setImproveSolutionPrompt] = useState("");
   const [isImproving, setImproving] = useState(false);
 
-  const handleImproveSolution = async () => {
+  const handleImproveSolution = async (improveSolutionPrompt: string) => {
     if (!activeProblem) return;
     if (!enabledSources.length) {
       toast(t("toasts.no-source.title"), {
@@ -99,7 +85,9 @@ export const ImproveSolutionDialog = forwardRef<
       for (const source of enabledSources) {
         const ai = getClientForSource(source.id);
         if (!ai) {
-          lastError = new Error(t("toasts.no-key.description", { provider: source.name }));
+          lastError = new Error(
+            t("toasts.no-key.description", { provider: source.name }),
+          );
           continue;
         }
 
@@ -149,49 +137,23 @@ ${source.traits}
     }
   };
 
-  const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
-    // 现在只处理 Dialog 内部的快捷键
-    if (e.ctrlKey && e.key === "Enter") {
-      e.preventDefault(); // 阻止默认行为（如换行）
-      setDialogOpen(false);
-      handleImproveSolution();
-    }
-  };
-
   return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>
+    <TextInputDialog
+      isOpen={dialogOpen}
+      onOpenChange={setDialogOpen}
+      trigger={
         <Button variant="outline" disabled={isImproving}>
           {isImproving && <Loader2 className="animate-spin mr-2" />}
           {t("trigger")} <Kbd>/</Kbd>
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
-        </DialogHeader>
-        <Textarea
-          value={improveSolutionPrompt}
-          onChange={(e) => setImproveSolutionPrompt(e.target.value)}
-          onKeyDown={onKeyDown} // 在 Textarea 上监听快捷键
-          className="h-40"
-          placeholder={t("placeholder")}
-        />
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={handleImproveSolution}
-              disabled={!improveSolutionPrompt || isImproving}
-            >
-              {t("submit")} <Kbd>Ctrl+Enter</Kbd>
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      }
+      title={t("title")}
+      description={t("description")}
+      placeholder={t("placeholder")}
+      submitText={t("submit")}
+      isSubmitting={isImproving}
+      onSubmit={handleImproveSolution}
+    />
   );
 });
 
