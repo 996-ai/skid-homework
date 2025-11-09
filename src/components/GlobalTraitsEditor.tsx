@@ -30,6 +30,7 @@ export default function GlobalTraitsEditor({
 
   return (
     <TextInputDialog
+      allowEmpty={true}
       isOpen={dialogOpen}
       onOpenChange={setDialogOpen}
       initialValue={traits}
