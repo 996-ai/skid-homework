@@ -59,6 +59,7 @@ export class OpenAiClient {
     this.client = new OpenAI({
       apiKey,
       baseURL: normalizeBaseUrl(baseUrl),
+      dangerouslyAllowBrowser: true,
     });
     this.config = {
       pollIntervalMs: config?.pollIntervalMs ?? 1_000,
