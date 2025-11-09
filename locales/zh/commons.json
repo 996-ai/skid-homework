@@ -8,8 +8,11 @@
     "settings": "设置",
     "title": "上传照片",
     "global-traits": {
-      "title": "全局提示词编辑器",
-      "hint": "点击这里来输入自定义Prompt"
+      "trigger": "全局提示词编辑器",
+      "title": "编辑全局提示词",
+      "desc": "自定义提示词将被拼接到最终的AI查询中",
+      "placeholder": "你是一个聪明的AI助手, 为作业求解而设计",
+      "submit-btn": "提交"
     }
   },
   "preview": {
