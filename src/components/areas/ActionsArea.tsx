@@ -70,7 +70,12 @@ export default function ActionsArea({
     <div
       className={cn("flex gap-2 flex-wrap", isMobileLayout && "flex-col gap-3")}
     >
-      <GlobalTraitsEditor />
+      <GlobalTraitsEditor
+        className={cn(
+          "flex-1 items-center justify-center",
+          isMobileLayout && "py-6 text-base",
+        )}
+      />
 
       <Button
         ref={clearAllBtnRef}

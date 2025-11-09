@@ -1,11 +1,17 @@
 import { useSettingsStore } from "@/store/settings-store";
-import { useState } from "react";
+import { useState, type ComponentProps } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import { Kbd } from "./ui/kbd";
 import { TextInputDialog } from "./dialogs/TextInputDialog";
+import { cn } from "@/lib/utils";
 
-export default function GlobalTraitsEditor() {
+export type GlobalTraitsEditorProps = {} & ComponentProps<"button">;
+
+export default function GlobalTraitsEditor({
+  className,
+  ...props
+}: GlobalTraitsEditorProps) {
   const { t } = useTranslation("commons", {
     keyPrefix: "actions.global-traits",
   });
@@ -18,7 +24,11 @@ export default function GlobalTraitsEditor() {
       onOpenChange={setDialogOpen}
       initialValue={traits}
       trigger={
-        <Button variant="outline" className="w-full">
+        <Button
+          variant="secondary"
+          className={cn("w-full", className)}
+          {...props}
+        >
           {t("trigger")} <Kbd>Unknown</Kbd>
         </Button>
       }
