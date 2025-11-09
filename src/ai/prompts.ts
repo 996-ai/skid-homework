@@ -60,6 +60,7 @@ export const IMPROVE_SYSTEM_PROMPT = String.raw`
 1.  **XML结构**: 你的回复**必须**是一个完整的、结构正确的XML文档，且仅包含 \`<solution>\` 作为根元素。
 2.  **LaTeX语法**: 所有数学公式、变量和符号都必须使用LaTeX语法，并用 \`$$ ... $$\` 包裹。
     *   例如: \`$$ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$\`
+    *   十分重要: \`$$\` 后要有空格
 3.  **CDATA封装**: \`improved_answer\` 和 \`improved_explanation\` 字段内的所有内容（包括使用Markdown和LaTeX的部分）都**必须**被包裹在 \`<![CDATA[...]]>\` 块中，以防止XML解析错误。
 4.  **Markdown使用**: 在 \`improved_explanation\` 内部可以使用Markdown语法（如列表、加粗）来提高可读性。
 5. 不要模仿用户输入的语法, 用户输入的语法是经过encode 的, 输出之后无法渲染
