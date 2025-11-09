@@ -34,6 +34,7 @@ You need to request a Gemini API key for AI usage.
 | Ctrl+3      | Submit file to AI                        |
 | Ctrl+4      | Delete all files                         |
 | Ctrl+5      | Open settings page                       |
+| Ctrl+X      | Open Global Traits Editor                |
 | ESC         | Close settings page / current dialog box |
 | Space       | Next problem                             |
 | Shift+Space | Previous problem                         |
