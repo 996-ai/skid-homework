@@ -8,8 +8,11 @@
     "settings": "Settings",
     "title": "Add Images",
     "global-traits": {
-      "title": "Global Traits Editor",
-      "hint": "Click here to edit global traits"
+      "trigger": "Global Traits Editor",
+      "title": "Edit Global Traits",
+      "desc": "The prompt will be append into the query when you skid your homework to personalize the response.",
+      "placeholder": "You're a smart assistant that helps the user with the homework.",
+      "submit-btn": "Submit"
     }
   },
   "preview": {

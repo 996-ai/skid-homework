@@ -6,7 +6,9 @@ import { Kbd } from "./ui/kbd";
 import { TextInputDialog } from "./dialogs/TextInputDialog";
 
 export default function GlobalTraitsEditor() {
-  const { t } = useTranslation("commons");
+  const { t } = useTranslation("commons", {
+    keyPrefix: "actions.global-traits",
+  });
   const { traits, setTraits } = useSettingsStore((s) => s);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -17,13 +19,13 @@ export default function GlobalTraitsEditor() {
       initialValue={traits}
       trigger={
         <Button variant="outline" className="w-full">
-          {t("actions.global-traits.title")} <Kbd>Unknown</Kbd>
+          {t("trigger")} <Kbd>Unknown</Kbd>
         </Button>
       }
-      title="Edit Global Traits"
-      description="The prompt will be append into the query when you skid your homework to personalize the response."
-      placeholder="You're a smart assistant that helps the user with the homework."
-      submitText="Update"
+      title={t("title")}
+      description={t("desc")}
+      placeholder={t("placeholder")}
+      submitText={t("submit-btn")}
       isSubmitting={false}
       onSubmit={(v) => setTraits(v)}
     />
