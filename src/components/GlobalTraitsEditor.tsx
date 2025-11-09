@@ -36,7 +36,7 @@ export default function GlobalTraitsEditor({
       initialValue={traits}
       trigger={
         <Button
-          variant="secondary"
+          variant={traits ? "outline" : "secondary"}
           className={cn("w-full", className)}
           {...props}
         >
