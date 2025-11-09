@@ -296,6 +296,10 @@ interface Resources {
             "description": "Removes every uploaded item and solution.",
             "label": "Clear all"
           },
+          "open-global-traits-editor": {
+            "description": "Open the editor dialog to edit global traits (prompt)",
+            "label": "Open Global Traits Editor"
+          },
           "openChat": {
             "description": "Jump straight to the chat workspace.",
             "label": "Open chat"

@@ -9,7 +9,8 @@ export type ShortcutAction =
   | "startScan"
   | "clearAll"
   | "openSettings"
-  | "openChat";
+  | "openChat"
+  | "openGlobalTraitsEditor";
 
 export type ShortcutMap = Record<ShortcutAction, string>;
 
@@ -20,6 +21,7 @@ const DEFAULT_SHORTCUTS: ShortcutMap = {
   clearAll: "ctrl+4",
   openSettings: "ctrl+5",
   openChat: "ctrl+e",
+  openGlobalTraitsEditor: "ctrl+x",
 };
 
 const DEFAULT_LANGUAGE: LanguagePreference =

@@ -308,6 +308,10 @@
         "openChat": {
           "label": "打开聊天",
           "description": "随时切换到聊天工作区。"
+        },
+        "open-global-traits-editor": {
+          "label": "打开全局提示词编辑器",
+          "description": "打开提示词编辑对话框"
         }
       }
     },

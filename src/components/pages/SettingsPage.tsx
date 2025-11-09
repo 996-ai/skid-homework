@@ -254,6 +254,15 @@ export default function SettingsPage() {
           "shortcuts.actions.openChat.description",
         ),
       },
+      {
+        action: "openGlobalTraitsEditor" as ShortcutAction,
+        label: translateSettings(
+          "shortcuts.actions.open-global-traits-editor.label",
+        ),
+        description: translateSettings(
+          "shortcuts.actions.open-global-traits-editor.description",
+        ),
+      },
     ];
   }, [translateSettings]);
 

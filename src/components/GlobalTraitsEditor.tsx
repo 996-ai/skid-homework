@@ -2,9 +2,10 @@ import { useSettingsStore } from "@/store/settings-store";
 import { useState, type ComponentProps } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
-import { Kbd } from "./ui/kbd";
 import { TextInputDialog } from "./dialogs/TextInputDialog";
 import { cn } from "@/lib/utils";
+import { useShortcut } from "@/hooks/use-shortcut";
+import { ShortcutHint } from "./ShortcutHint";
 
 export type GlobalTraitsEditorProps = {} & ComponentProps<"button">;
 
@@ -18,6 +19,15 @@ export default function GlobalTraitsEditor({
   const { traits, setTraits } = useSettingsStore((s) => s);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const triggerShortcut = useShortcut(
+    "openGlobalTraitsEditor",
+    (event) => {
+      event.preventDefault();
+      setDialogOpen(true);
+    },
+    [setDialogOpen],
+  );
+
   return (
     <TextInputDialog
       isOpen={dialogOpen}
@@ -29,7 +39,7 @@ export default function GlobalTraitsEditor({
           className={cn("w-full", className)}
           {...props}
         >
-          {t("trigger")} <Kbd>Unknown</Kbd>
+          {t("trigger")} <ShortcutHint shortcut={triggerShortcut} />
         </Button>
       }
       title={t("title")}
