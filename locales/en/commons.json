@@ -308,6 +308,10 @@
         "openChat": {
           "label": "Open chat",
           "description": "Jump straight to the chat workspace."
+        },
+        "open-global-traits-editor": {
+          "label": "Open Global Traits Editor",
+          "description": "Open the editor dialog to edit global traits (prompt)"
         }
       }
     },
