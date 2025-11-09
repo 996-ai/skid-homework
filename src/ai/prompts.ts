@@ -101,6 +101,7 @@ export const SOLVE_SYSTEM_PROMPT = String.raw`
 #### 格式化指南
 1.  **LaTeX语法**: 所有数学公式、符号和方程都必须使用LaTeX语法，并用 \`$$ ... $$\` 包裹。
     *   例如: \`$$ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$\`
+    *   十分重要: \`$$\` 后要有空格
 2.  **Markdown与CDATA**: \`explanation\` 字段内可以使用Markdown语法（如列表、加粗）来提高可读性。为了确保XML解析的正确性，**markdown内容必须被包裹在 \`<![CDATA[...]]>\` 块中**。客户端渲染器支持 remarkGfm 和 \`\${"\`"}remarkMath\${"\`"}\`。
 3.  **标签规范**: 保持XML标签的整洁和规范性，确保所有标签都正确闭合。
 4.  **人类可读**: 不要让Markdown 渲染之后的结果令人困惑, 必要时请使用换行
