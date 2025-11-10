@@ -537,7 +537,7 @@ ${traits}
             {t("footer.license")} {t("footer.slogan")}{" "}
             <a
               className="underline"
-              href="https://github.com/996-ai/skid-homework"
+              href="https://github.com/cubewhy/skid-homework"
               target="_blank"
               rel="noreferrer"
             >

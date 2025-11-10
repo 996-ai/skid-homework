@@ -199,12 +199,9 @@ export default function InitPage() {
                       <Input
                         id="base-url"
                         type="url"
-                        placeholder={t(
-                          "form.advanced.base-url-placeholder",
-                          {
-                            provider: activeSource?.name ?? "",
-                          },
-                        )}
+                        placeholder={t("form.advanced.base-url-placeholder", {
+                          provider: activeSource?.name ?? "",
+                        })}
                         value={baseUrl ?? ""}
                         onChange={(e) => setBaseUrl(e.target.value)}
                         className="placeholder:text-slate-500 focus-visible:ring-indigo-500"
@@ -287,7 +284,7 @@ export default function InitPage() {
         <div className="opacity-80">
           {t("footer.notice")}{" "}
           <a
-            href="https://github.com/996-ai/skid-homework"
+            href="https://github.com/cubewhy/skid-homework"
             className="underline"
           >
             {t("footer.source")}
