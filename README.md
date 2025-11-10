@@ -6,6 +6,8 @@
 
 开源 AI 家庭作业解答器, 为自学者节省时间的学习平台
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2F996-ai%2Fskid-homework)
+
 ## 安全提示
 
 Skid-Homework 不会要求你下载桌面软件, 一切东西都在浏览器内运行
