@@ -2,9 +2,7 @@
 
 [ENGLISH README](/README-EN.md)
 
-> 学生们的兴趣 & 日常生活 很重要
-
-开源 AI 家庭作业解答器, 为自学者节省时间的学习平台
+符合人体工程学设计、人工智能驱动的作业助手
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fcubewhy%2Fskid-homework)
 
