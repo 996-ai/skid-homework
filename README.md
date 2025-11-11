@@ -81,6 +81,33 @@ Skid-Homework 不会要求你下载桌面软件, 一切东西都在浏览器内�
 
 请参照 SkidCamera README 中的步骤来使用
 
+### 老师不喜欢我的答案风格
+
+你可以点击界面中的`编辑全局Prompt` (Ctrl+X) 来编辑提示词
+
+可以写特殊的需求, 例如答案风格
+
+### 我没有API Key
+
+Gemini API Key 是免费的, 可以去申请
+
+如果环境不允许没办法, 不过可以用Cloudflare 搞反向代理, 方法请自行查找
+
+### OCR 是怎么实现的
+
+现在站点会将图片直接发送给AI
+
+如果你有更好的方案请开pr/issues
+
+### 比传统软件(例如作业帮)强大在哪里
+
+- 电脑可用
+- 有针对写作业场景设计的人体工程学
+
+### 我还有其他问题
+
+请移步 [issues](https://github.com/cubewhy/skid-homework/issues)
+
 ## Star 历史记录
 
 如果这个项目节省了你的时间, 请务必献上一个 Star!
