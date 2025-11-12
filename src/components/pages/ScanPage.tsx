@@ -544,7 +544,8 @@ ${traits}
                 target="_blank"
                 rel="noreferrer"
               >
-                {t("footer.source")}
+                {/* {t("footer.source")} */}
+                https://github.com/cubewhy/skid-homework
               </a>
             </p>
           </footer>

@@ -287,7 +287,8 @@ export default function InitPage() {
             href="https://github.com/cubewhy/skid-homework"
             className="underline"
           >
-            {t("footer.source")}
+            {/* {t("footer.source")} */}
+            https://github.com/cubewhy/skid-homework
           </a>
         </div>
       </footer>
