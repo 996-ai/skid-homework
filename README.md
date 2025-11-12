@@ -108,6 +108,12 @@ Gemini API Key 是免费的, 可以去申请
 - 电脑可用
 - 有针对写作业场景设计的人体工程学
 
+### 我的API 无法使用
+
+OpenAI API 未经完整测试, 若出现问题请携带 Devtools 中的日志开issue
+
+第三方API 不保证100% 可以用.
+
 ### 我还有其他问题
 
 请移步 [issues](https://github.com/cubewhy/skid-homework/issues)
