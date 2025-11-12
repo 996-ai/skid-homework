@@ -61,13 +61,13 @@ export default function PreviewCard({
     [appendFiles, isMobileLayout],
   );
 
-  const preventTyping = (e: KeyboardEvent) => {
-    // 2. Allow modifier keys like Ctrl, Shift, etc., but block everything else.
-    // This ensures that Ctrl+V (paste) still works.
-    if (!e.ctrlKey && !e.metaKey && !e.altKey) {
-      e.preventDefault();
-    }
-  };
+  // const preventTyping = (e: KeyboardEvent) => {
+  //   // 2. Allow modifier keys like Ctrl, Shift, etc., but block everything else.
+  //   // This ensures that Ctrl+V (paste) still works.
+  //   if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+  //     e.preventDefault();
+  //   }
+  // };
 
   const handlePaste = (e: ClipboardEvent) => {
     e.preventDefault();
@@ -78,11 +78,11 @@ export default function PreviewCard({
   return (
     <>
       <Card
-        contentEditable
+        // contentEditable
         tabIndex={0}
         onPaste={handlePaste}
         suppressContentEditableWarning
-        onKeyDown={preventTyping}
+        // onKeyDown={preventTyping}
         className={cn(
           "md:col-span-2 border-white/10 backdrop-blur outline-none caret-transparent cursor-default",
           isMobileLayout &&
