@@ -32,7 +32,6 @@
     "dexie": "^4.2.1",
     "framer-motion": "^12.23.22",
     "i18next": "^25.6.0",
-    "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
     "katex": "^0.16.22",
     "lucide-react": "^0.544.0",
