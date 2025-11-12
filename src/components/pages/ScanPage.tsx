@@ -404,86 +404,110 @@ ${traits}
   };
 
   return (
-    <div className={cn("min-h-screen", isMobile && "pb-24")}>
-      <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
-        <header
-          className={cn(
-            "mb-6 flex items-center justify-between gap-4",
-            isMobile && "flex-col items-start",
-          )}
-        >
-          <div className="flex w-full flex-col gap-2">
-            <h1
-              className={cn(
-                "text-3xl font-semibold tracking-tight",
-                isMobile && "text-2xl leading-tight",
-              )}
-            >
-              {t("title")}
-            </h1>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
-              <Info className="h-4 w-4 shrink-0" />
-              <span>{t("tip")}</span>
-            </div>
-          </div>
-          {showDonateBtn && (
-            <Button
-              className={cn(
-                "gap-2 whitespace-nowrap",
-                isMobile ? "w-full justify-center rounded-full py-3" : "px-4",
-              )}
-              size={isMobile ? "lg" : "default"}
-              variant="secondary"
-              asChild
-            >
-              <a
-                href="https://996every.day/donate"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <StarIcon className="h-4 w-4" />
-                {t("donate-btn")}
-              </a>
-            </Button>
-          )}
-        </header>
-
-        {isMobile && (
-          <div className="mb-6 w-full rounded-2xl border border-white/15 bg-background/70 p-4 shadow-sm backdrop-blur">
-            <p className="text-base font-medium">
-              {items.length
-                ? t("mobile.status", { count: items.length })
-                : t("mobile.empty")}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {allowPdfUploads ? t("mobile.hint-ready") : t("mobile.hint-pdf")}
-            </p>
-          </div>
-        )}
-
-        {isMobile ? (
-          <Tabs
-            value={activeTab}
-            onValueChange={(value) =>
-              setActiveTab(value as "capture" | "preview")
-            }
-            className="md:hidden"
+    <>
+      <div className={cn("min-h-screen", isMobile && "pb-24")}>
+        <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+          <header
+            className={cn(
+              "mb-6 flex items-center justify-between gap-4",
+              isMobile && "flex-col items-start",
+            )}
           >
-            <TabsList className="grid w-full grid-cols-2 bg-muted/40">
-              <TabsTrigger
-                value="capture"
-                className="text-sm font-medium data-[state=active]:bg-background data-[state=active]:text-foreground"
+            <div className="flex w-full flex-col gap-2">
+              <h1
+                className={cn(
+                  "text-3xl font-semibold tracking-tight",
+                  isMobile && "text-2xl leading-tight",
+                )}
               >
-                {t("mobile.tabs.capture")}
-              </TabsTrigger>
-              <TabsTrigger
-                value="preview"
-                className="text-sm font-medium data-[state=active]:bg-background data-[state=active]:text-foreground"
+                {t("title")}
+              </h1>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
+                <Info className="h-4 w-4 shrink-0" />
+                <span>{t("tip")}</span>
+              </div>
+            </div>
+            {showDonateBtn && (
+              <Button
+                className={cn(
+                  "gap-2 whitespace-nowrap",
+                  isMobile ? "w-full justify-center rounded-full py-3" : "px-4",
+                )}
+                size={isMobile ? "lg" : "default"}
+                variant="secondary"
+                asChild
               >
-                {t("mobile.tabs.preview")}
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="capture" className="mt-4">
+                <a
+                  href="https://996every.day/donate"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <StarIcon className="h-4 w-4" />
+                  {t("donate-btn")}
+                </a>
+              </Button>
+            )}
+          </header>
+
+          {isMobile && (
+            <div className="mb-6 w-full rounded-2xl border border-white/15 bg-background/70 p-4 shadow-sm backdrop-blur">
+              <p className="text-base font-medium">
+                {items.length
+                  ? t("mobile.status", { count: items.length })
+                  : t("mobile.empty")}
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {allowPdfUploads
+                  ? t("mobile.hint-ready")
+                  : t("mobile.hint-pdf")}
+              </p>
+            </div>
+          )}
+
+          {isMobile ? (
+            <Tabs
+              value={activeTab}
+              onValueChange={(value) =>
+                setActiveTab(value as "capture" | "preview")
+              }
+              className="md:hidden"
+            >
+              <TabsList className="grid w-full grid-cols-2 bg-muted/40">
+                <TabsTrigger
+                  value="capture"
+                  className="text-sm font-medium data-[state=active]:bg-background data-[state=active]:text-foreground"
+                >
+                  {t("mobile.tabs.capture")}
+                </TabsTrigger>
+                <TabsTrigger
+                  value="preview"
+                  className="text-sm font-medium data-[state=active]:bg-background data-[state=active]:text-foreground"
+                >
+                  {t("mobile.tabs.preview")}
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="capture" className="mt-4">
+                <ActionsCard
+                  appendFiles={appendFiles}
+                  clearAll={clearAll}
+                  startScan={startScan}
+                  totalBytes={totalBytes}
+                  items={items}
+                  allowPdfUploads={allowPdfUploads}
+                  layout="mobile"
+                />
+              </TabsContent>
+              <TabsContent value="preview" className="mt-4">
+                <PreviewCard
+                  appendFiles={appendFiles}
+                  removeItem={removeItem}
+                  items={items}
+                  layout="mobile"
+                />
+              </TabsContent>
+            </Tabs>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
               <ActionsCard
                 appendFiles={appendFiles}
                 clearAll={clearAll}
@@ -491,61 +515,41 @@ ${traits}
                 totalBytes={totalBytes}
                 items={items}
                 allowPdfUploads={allowPdfUploads}
-                layout="mobile"
               />
-            </TabsContent>
-            <TabsContent value="preview" className="mt-4">
+
               <PreviewCard
                 appendFiles={appendFiles}
                 removeItem={removeItem}
                 items={items}
-                layout="mobile"
               />
-            </TabsContent>
-          </Tabs>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
-            <ActionsCard
-              appendFiles={appendFiles}
-              clearAll={clearAll}
-              startScan={startScan}
-              totalBytes={totalBytes}
-              items={items}
-              allowPdfUploads={allowPdfUploads}
-            />
-
-            <PreviewCard
-              appendFiles={appendFiles}
-              removeItem={removeItem}
-              items={items}
-            />
-          </div>
-        )}
-
-        {/* Solutions Section */}
-        <section className={cn("mt-8", !isMobile && "mt-10")}>
-          <SolutionsArea />
-        </section>
-
-        <footer
-          className={cn(
-            "mt-10 flex items-center justify-between text-sm text-muted-foreground",
-            isMobile && "mt-12 flex-col items-start gap-3 text-base",
+            </div>
           )}
-        >
-          <p>
-            {t("footer.license")} {t("footer.slogan")}{" "}
-            <a
-              className="underline"
-              href="https://github.com/cubewhy/skid-homework"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {t("footer.source")}
-            </a>
-          </p>
-        </footer>
+
+          {/* Solutions Section */}
+          <section className={cn("mt-8", !isMobile && "mt-10")}>
+            <SolutionsArea />
+          </section>
+
+          <footer
+            className={cn(
+              "mt-10 flex items-center justify-between text-sm text-muted-foreground",
+              isMobile && "mt-12 flex-col items-start gap-3 text-base",
+            )}
+          >
+            <p>
+              {t("footer.license")} {t("footer.slogan")}{" "}
+              <a
+                className="underline"
+                href="https://github.com/cubewhy/skid-homework"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t("footer.source")}
+              </a>
+            </p>
+          </footer>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
