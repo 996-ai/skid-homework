@@ -6,12 +6,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Badge } from "../ui/badge";
 import { twMerge } from "tailwind-merge";
 import type { FileItem } from "@/store/problems-store";
-import {
-  useCallback,
-  useState,
-  type ClipboardEvent,
-  type KeyboardEvent,
-} from "react";
+import { useCallback, useState, type ClipboardEvent } from "react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
