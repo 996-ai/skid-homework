@@ -102,6 +102,14 @@ export default function ScanPage() {
     [items],
   );
 
+  useEffect(() => {
+    window.addEventListener("beforeunload", (e) => {
+      if (items.length > 0) {
+        e.preventDefault();
+      }
+    });
+  }, [items.length]);
+
   // Callback to add new files to the items list using the store action.
   const appendFiles = useCallback(
     async (files: File[] | FileList, source: FileItem["source"]) => {
