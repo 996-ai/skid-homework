@@ -1,3 +1,5 @@
+import { fileToBase64 } from "./encoding";
+
 /**
  * Processes an image file to create a "scanned document" effect.
  * The process involves converting the image to grayscale and increasing its contrast.
@@ -90,10 +92,10 @@ export const binarizeImageFile = async (
           // Create a new filename for the processed file
           const fileName = `scanned_${imageFile.name.split(".")[0] || "document"}.png`;
           const newFile = new File([blob], fileName, { type });
-          const newUrl = URL.createObjectURL(newFile);
-
-          // Resolve the promise with the new file and its URL
-          resolve({ file: newFile, url: newUrl });
+          fileToBase64(newFile).then((newUrl) => {
+            // Resolve the promise with the new file and its URL
+            resolve({ file: newFile, url: newUrl });
+          });
         },
         type,
         quality,

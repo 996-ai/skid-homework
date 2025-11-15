@@ -5,7 +5,7 @@ import { useAiStore } from "@/store/ai-store";
 import ActionsCard from "../cards/ActionsCard";
 import PreviewCard from "../cards/PreviewCard";
 import { SOLVE_SYSTEM_PROMPT } from "@/ai/prompts";
-import { uint8ToBase64 } from "@/utils/encoding";
+import { fileToBase64, uint8ToBase64 } from "@/utils/encoding";
 import { parseSolveResponse } from "@/ai/response";
 
 import {
@@ -104,7 +104,7 @@ export default function ScanPage() {
 
   // Callback to add new files to the items list using the store action.
   const appendFiles = useCallback(
-    (files: File[] | FileList, source: FileItem["source"]) => {
+    async (files: File[] | FileList, source: FileItem["source"]) => {
       let rejectedPdf = false;
       const arr = Array.from(files).filter((f) => {
         if (f.type.startsWith("image/")) {
@@ -130,17 +130,23 @@ export default function ScanPage() {
 
       if (arr.length === 0) return;
 
-      const initialItems: FileItem[] = arr.map((file) => ({
-        id: crypto.randomUUID(),
-        file,
-        mimeType: file.type,
-        url: URL.createObjectURL(file),
-        source,
-        status:
-          file.type.startsWith("image/") && imageBinarizingRef.current
-            ? "rasterizing"
-            : "pending",
-      }));
+      const initialItems: FileItem[] = [];
+
+      for (const file of arr) {
+        const base64Url = await fileToBase64(file);
+        const item: FileItem = {
+          id: crypto.randomUUID(),
+          file,
+          mimeType: file.type,
+          url: base64Url,
+          source,
+          status:
+            file.type.startsWith("image/") && imageBinarizingRef.current
+              ? "rasterizing"
+              : "pending",
+        };
+        initialItems.push(item);
+      }
 
       addFileItems(initialItems);
 
